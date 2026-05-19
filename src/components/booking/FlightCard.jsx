@@ -18,7 +18,7 @@ function StopsBadge({ stops }) {
 export default function FlightCard({ flight, onSelect }) {
   const navigate = useNavigate()
   const {
-    id, airline, airlineLogo, flightNo,
+    id, airline, airlineLogo,
     from, to, depart, arrive,
     duration, stops, price, seats,
   } = flight

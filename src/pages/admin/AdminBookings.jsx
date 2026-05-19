@@ -11,12 +11,12 @@ const COLUMNS = [
   { key: 'customer', label: 'Customer', render: v => <span className="font-semibold text-ink">{v}</span> },
   { key: 'trip',     label: 'Trip' },
   { key: 'date',     label: 'Travel Date' },
-  { key: 'status',   label: 'Status', render: (v, row) => <StatusPill status={row.status} /> },
+  { key: 'status',   label: 'Status', render: (_v, row) => <StatusPill status={row.status} /> },
   { key: 'amount',   label: 'Amount', render: v => <span className="font-bold text-ink">${v.toLocaleString()}</span> },
   {
     key: '_actions',
     label: 'Actions',
-    render: (v, row) => (
+    render: () => (
       <div className="flex gap-2">
         <button className="text-xs font-semibold text-ash border border-hairline px-2.5 py-1 rounded-lg hover:border-ink hover:text-ink transition-colors">View</button>
         <button className="text-xs font-semibold text-red-500 border border-red-100 px-2.5 py-1 rounded-lg hover:bg-red-50 transition-colors">Cancel</button>

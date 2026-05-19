@@ -1,5 +1,5 @@
 import { useParams } from 'react-router-dom'
-import { Plane, BedDouble } from 'lucide-react'
+import { Plane } from 'lucide-react'
 import Navbar from '../../components/layout/Navbar'
 import BookingPanel from '../../components/booking/BookingPanel'
 import { BUNDLES } from '../../data/mockData'
