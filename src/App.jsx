@@ -1,11 +1,17 @@
 import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "./assets/vite.svg";
-import heroImg from "./assets/hero.png";
-import "./App.css";
+import { BrowserRouter as router, Routes, Route } from "react-router-dom";
 
 function App() {
-  return <></>;
+  return (
+    <>
+      <Router>
+        <Routes>
+          <Route path="/" />
+          <Route path="/auth" element={<Auth />} />
+        </Routes>
+      </Router>
+    </>
+  );
 }
 
 export default App;

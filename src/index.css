@@ -1,0 +1,24 @@
+@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply font-sans text-ink bg-canvas;
+    -webkit-font-smoothing: antialiased;
+  }
+}
+
+@layer components {
+  /* Skyora wordmark — gradient text */
+  .skyora-wordmark {
+    background: linear-gradient(90deg, #ff385c 0%, #e00b41 50%, #92174d 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -0.5px;
+    font-weight: 800;
+  }
+}
