@@ -3,69 +3,118 @@ import Navbar from '../components/layout/Navbar'
 import Footer from '../components/layout/Footer'
 import TripCard from '../components/booking/TripCard'
 import ReviewModal from '../components/ui/ReviewModal'
+import { useReviews } from '../context/ReviewsContext'
+import { useToast } from '../context/ToastContext'
 import { MY_TRIPS } from '../data/mockData'
 
 const TABS = [
-  { key: 'upcoming', label: 'Upcoming' },
-  { key: 'past',     label: 'Past' },
-  { key: 'cancelled', label: 'Cancelled' },
+  { id: 'upcoming', label: 'Upcoming Trips', count: 3 },
+  { id: 'past', label: 'Past Trips', count: 3 },
+  { id: 'cancelled', label: 'Cancelled', count: 2 },
 ]
 
 export default function MyTrips() {
   const [activeTab, setActiveTab] = useState('upcoming')
-  const [reviewTrip, setReviewTrip] = useState(null)
+  const [reviewing, setReviewing] = useState(null)
+  const [submittedReviews, setSubmittedReviews] = useState({})
+  const { addReview } = useReviews()
+  const toast = useToast()
 
-  const trips = MY_TRIPS[activeTab] ?? []
+  const trips = MY_TRIPS[activeTab] || []
+
+  function handleReviewSubmit(data) {
+    addReview('hotel', data.tripId, {
+      author: 'Sarah M.',
+      rating: data.rating,
+      text: data.text,
+      tags: data.tags,
+      date: 'May 2026',
+    })
+    setSubmittedReviews((prev) => ({ ...prev, [data.tripId]: true }))
+    setReviewing(null)
+    toast('Review submitted! Thank you.')
+  }
 
   return (
-    <div className="min-h-screen flex flex-col bg-cloud">
+    <div className="bg-cloud min-h-screen flex flex-col">
       <Navbar />
-      <main className="flex-1 max-w-4xl mx-auto w-full px-4 sm:px-6 py-10">
-        <h1 className="text-3xl font-extrabold text-ink mb-6">My Trips</h1>
 
-        {/* Tab bar */}
-        <div className="flex gap-1 bg-white rounded-xl border border-hairline p-1 mb-8 w-fit">
-          {TABS.map(({ key, label }) => (
-            <button
-              key={key}
-              onClick={() => setActiveTab(key)}
-              className={`px-5 py-2 rounded-lg text-sm font-semibold transition-all ${
-                activeTab === key
-                  ? 'gradient-bg text-white shadow-sm'
-                  : 'text-ash hover:text-ink'
-              }`}
-            >
-              {label}
-              <span className={`ml-1.5 text-xs ${activeTab === key ? 'text-white/80' : 'text-ash'}`}>
-                ({MY_TRIPS[key]?.length ?? 0})
-              </span>
-            </button>
-          ))}
+      <main className="max-w-6xl mx-auto px-6 py-10 w-full flex-1">
+
+        {/* ── Header ────────────────────────────────────────────────────────── */}
+        <p className="text-xs font-semibold text-ash uppercase tracking-wider mb-1.5">
+          DASHBOARD
+        </p>
+        <h1 className="text-3xl md:text-4xl font-extrabold text-ink">My Trips</h1>
+        <p className="text-ash text-sm mt-1.5 mb-8">
+          Review your bookings, manage upcoming travel and share feedback on past adventures.
+        </p>
+
+        {/* ── Tabs ──────────────────────────────────────────────────────────── */}
+        <div className="flex items-end border-b border-hairline mb-7">
+          {TABS.map((tab) => {
+            const isActive = activeTab === tab.id
+            return (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={[
+                  'relative flex items-center gap-2 px-4 py-3 text-sm font-semibold transition-colors',
+                  isActive ? 'text-ink' : 'text-ash hover:text-ink',
+                ].join(' ')}
+              >
+                {tab.label}
+                <span
+                  className={[
+                    'text-xs font-bold px-2 py-0.5 rounded-full',
+                    isActive ? 'bg-rausch text-white' : 'bg-cloud text-ash',
+                  ].join(' ')}
+                >
+                  {tab.count}
+                </span>
+                {isActive && (
+                  <span className="absolute bottom-0 left-0 right-0 h-[3px] gradient-bg rounded-t-full" />
+                )}
+              </button>
+            )
+          })}
         </div>
 
-        {/* Trip cards */}
-        <div className="flex flex-col gap-5">
-          {trips.length > 0 ? trips.map(trip => (
-            <TripCard
-              key={trip.id}
-              trip={trip}
-              tab={activeTab}
-              onReview={setReviewTrip}
-            />
-          )) : (
-            <div className="text-center py-20 text-ash">
-              <p className="text-xl font-bold mb-2">No {activeTab} trips</p>
+        {/* ── Trip list ─────────────────────────────────────────────────────── */}
+        <div className="space-y-4">
+          {trips.length === 0 && (
+            <div className="text-center py-16 text-ash">
+              <p className="text-lg font-bold mb-1">No trips here</p>
               <p className="text-sm">Time to plan your next adventure!</p>
             </div>
           )}
+          {trips.map((trip) => (
+            <div key={trip.id}>
+              <TripCard
+                trip={trip}
+                tab={activeTab}
+                onReview={() => setReviewing(trip)}
+              />
+              {activeTab === 'past' && submittedReviews[trip.id] && (
+                <div className="mt-2 bg-emerald-50 border border-emerald-200 rounded-xl px-4 py-3 text-emerald-700 text-sm font-semibold flex items-center gap-2">
+                  <span>✓</span> Your review has been submitted
+                </div>
+              )}
+            </div>
+          ))}
         </div>
       </main>
 
-      {reviewTrip && (
-        <ReviewModal trip={reviewTrip} onClose={() => setReviewTrip(null)} />
-      )}
-
       <Footer />
+
+      {/* ── Review Modal ──────────────────────────────────────────────────── */}
+      {reviewing && (
+        <ReviewModal
+          trip={reviewing}
+          onClose={() => setReviewing(null)}
+          onSubmit={handleReviewSubmit}
+        />
+      )}
     </div>
   )
 }
