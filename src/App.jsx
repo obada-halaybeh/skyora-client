@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { BrowserRouter as router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Auth from "./pages/Auth";
 
 function App() {
   return (
