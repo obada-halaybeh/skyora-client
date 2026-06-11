@@ -3,7 +3,7 @@ import { Search } from "lucide-react";
 export default function SearchPill({
   where = "Dubai, UAE",
   dates = "May 15-26",
-  travelers = "2 audlts",
+  travelers = "2 adults",
 }) {
   return (
     <div className="inline-flex items-center bg-canvas rounded-[40px] border border-hairline shadow-[rgba(0,0,0,0.04)_0_2px_6px] overflow-hidden h-16">

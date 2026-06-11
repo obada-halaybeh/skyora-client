@@ -5,7 +5,7 @@ export default function TopNav({ activeTab = "Flights" }) {
   const tabs = [
     { label: "Flights", Icon: Plane },
     { label: "Hotels", Icon: BedDouble },
-    { label: "Bundeles", Icon: Gift },
+    { label: "Bundles", Icon: Gift },
   ];
 
   return (
