@@ -1,7 +1,6 @@
 import { Star } from "lucide-react";
 
 export default function ReviewsSection({ title = "Reviews", reviews = [] }) {
-  // If there are no reviews yet, show a friendly empty state
   if (reviews.length === 0) {
     return (
       <div className="border-t border-hairline pt-8">
@@ -11,7 +10,6 @@ export default function ReviewsSection({ title = "Reviews", reviews = [] }) {
     );
   }
 
-  // Average rating across all reviews
   const avg = reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length;
 
   return (
