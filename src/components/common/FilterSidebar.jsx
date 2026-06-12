@@ -5,6 +5,8 @@ export default function FilterSidebar({
   setMaxPrice,
   checks,
   toggle,
+  groupTitle,
+  options,
 }) {
   const Checkbox = ({ label }) => {
     const checked = checks[label] || false;
@@ -48,14 +50,12 @@ export default function FilterSidebar({
         </div>
       </div>
 
-      {/* Airlines */}
+      {/* Configurable checkbox group */}
       <div>
-        <h4 className="text-base font-bold mb-4">Airlines</h4>
-        <Checkbox label="Emirates" />
-        <Checkbox label="Lufthansa" />
-        <Checkbox label="British Airways" />
-        <Checkbox label="Singapore Airlines" />
-        <Checkbox label="Qatar Airways" />
+        <h4 className="text-base font-bold mb-4">{groupTitle}</h4>
+        {options.map((opt) => (
+          <Checkbox key={opt} label={opt} />
+        ))}
       </div>
     </div>
   );
