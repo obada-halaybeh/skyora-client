@@ -6,6 +6,7 @@ import Footer from "./components/layout/Footer";
 import Home from "./pages/Home";
 import Flights from "./pages/Flights";
 import Hotels from "./pages/Hotels";
+import Bundles from "./pages/Bundles";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
           <Route path="/auth" element={<Auth />} />
           <Route path="/flights" element={<Flights />} />
           <Route path="/hotels" element={<Hotels />} />
+          <Route path="/bundles" element={<Bundles />} />
         </Routes>
         {/* <Footer /> */}
       </Router>
