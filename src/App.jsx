@@ -8,6 +8,7 @@ import Flights from "./pages/Flights";
 import Hotels from "./pages/Hotels";
 import Bundles from "./pages/Bundles";
 import FlightDetail from "./pages/FlightDetail";
+import HotelDetail from "./pages/HotelDetail";
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
           <Route path="/hotels" element={<Hotels />} />
           <Route path="/bundles" element={<Bundles />} />
           <Route path="/flights/:id" element={<FlightDetail />} />
+          <Route path="/hotels/:id" element={<HotelDetail />} />
         </Routes>
         {/* <Footer /> */}
       </Router>

@@ -4,6 +4,7 @@ import BookingPanel from "../components/common/BookingPanel";
 import SeatMap from "../components/flights/SeatMap";
 import { useParams } from "react-router-dom";
 import { flights } from "../data/flights";
+import ReviewsSection from "../components/common/ReviewsSection";
 
 export default function FlightDetail() {
   const { id } = useParams();
@@ -68,7 +69,7 @@ export default function FlightDetail() {
 
               {/* Tags */}
               <div className="flex gap-3">
-                {[flight.date, flight.aircraft, "Fully Refundable"].map((t) => (
+                {[flight.date, flight.aircraft].map((t) => (
                   <span
                     key={t}
                     className="bg-cloud text-ash text-[13px] font-medium px-3 py-1.5 rounded-lg"
@@ -99,6 +100,12 @@ export default function FlightDetail() {
             <div className="border-t border-hairline pt-8">
               <h2 className="text-xl font-bold mb-5">Select Your Seat</h2>
               <SeatMap />
+            </div>
+            <div className="mt-8">
+              <ReviewsSection
+                title="Traveler Reviews"
+                reviews={flight.reviews}
+              />
             </div>
           </div>
 

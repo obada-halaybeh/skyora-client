@@ -4,6 +4,7 @@ import Footer from "../components/layout/Footer";
 import SearchPill from "../components/home/SearchPill";
 import FilterSidebar from "../components/common/FilterSidebar";
 import HotelCard from "../components/hotels/HotelCard";
+import { hotels } from "../data/hotels";
 
 export default function Hotels() {
   const [maxPrice, setMaxPrice] = useState(2000);
@@ -12,69 +13,6 @@ export default function Hotels() {
   const toggle = (label) => {
     setChecks({ ...checks, [label]: !checks[label] });
   };
-
-  const hotels = [
-    {
-      name: "Burj Al Arab",
-      location: "Jumeirah Beach, Dubai",
-      stars: 5,
-      rating: 4.9,
-      reviews: 2840,
-      price: 980,
-      imgSeed: 251,
-      amenities: ["Pool", "Spa", "WiFi", "Restaurant"],
-    },
-    {
-      name: "Atlantis The Palm",
-      location: "Palm Jumeirah, Dubai",
-      stars: 5,
-      rating: 4.7,
-      reviews: 5100,
-      price: 620,
-      imgSeed: 355,
-      amenities: ["Waterpark", "Pool", "Spa", "WiFi"],
-    },
-    {
-      name: "Address Downtown",
-      location: "Downtown Dubai",
-      stars: 5,
-      rating: 4.8,
-      reviews: 1920,
-      price: 450,
-      imgSeed: 188,
-      amenities: ["Pool", "WiFi", "Gym", "Bar"],
-    },
-    {
-      name: "JW Marriott Marquis",
-      location: "Business Bay, Dubai",
-      stars: 5,
-      rating: 4.6,
-      reviews: 3200,
-      price: 320,
-      imgSeed: 267,
-      amenities: ["Pool", "WiFi", "Gym", "Spa"],
-    },
-    {
-      name: "Sofitel Dubai",
-      location: "Downtown Dubai",
-      stars: 4,
-      rating: 4.5,
-      reviews: 1400,
-      price: 240,
-      imgSeed: 312,
-      amenities: ["Pool", "WiFi", "Restaurant"],
-    },
-    {
-      name: "Hilton Dubai Creek",
-      location: "Deira, Dubai",
-      stars: 4,
-      rating: 4.4,
-      reviews: 890,
-      price: 180,
-      imgSeed: 433,
-      amenities: ["WiFi", "Pool", "Gym"],
-    },
-  ];
 
   const checkedStars = Object.keys(checks).filter((label) => checks[label]);
 
