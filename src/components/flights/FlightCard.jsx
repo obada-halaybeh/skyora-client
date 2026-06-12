@@ -1,8 +1,10 @@
 import React from "react";
 import AirlineLogo from "./AirlineLogo";
 import Button from "../common/Button";
+import { Link } from "react-router-dom";
 
 export default function FlightCard({
+  id,
   airline,
   from,
   to,
@@ -43,9 +45,11 @@ export default function FlightCard({
           <p className="text-[11px] text-ash mb-1 font-medium">from</p>
           <p className="text-2xl font-bold">${price}</p>
           <p className="text-xs text-ash mb-2.5">per person</p>
-          <Button variant="primary" size="sm">
-            Select
-          </Button>
+          <Link to={`/flights/${id}`}>
+            <Button variant="primary" size="sm">
+              Select
+            </Button>
+          </Link>
         </div>
       </div>
     </div>

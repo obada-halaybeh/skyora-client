@@ -4,6 +4,7 @@ import SearchPill from "../components/home/SearchPill";
 import FilterSidebar from "../components/common/FilterSidebar";
 import FlightCard from "../components/flights/FlightCard";
 import { useState } from "react";
+import { flights } from "../data/flights";
 
 export default function Flights() {
   const [maxPrice, setMaxPrice] = useState(2000);
@@ -11,63 +12,7 @@ export default function Flights() {
   const toggle = (label) => {
     setChecks({ ...checks, [label]: !checks[label] });
   };
-  const flights = [
-    {
-      airline: "Emirates",
-      from: "LHR",
-      to: "DXB",
-      depart: "08:15",
-      arrive: "18:35",
-      duration: "7h 20m",
-      stops: "1 stop",
-      price: 429,
-      direct: false,
-    },
-    {
-      airline: "British Airways",
-      from: "LHR",
-      to: "DXB",
-      depart: "10:30",
-      arrive: "20:45",
-      duration: "7h 15m",
-      stops: "1 stop",
-      price: 389,
-      direct: false,
-    },
-    {
-      airline: "Emirates",
-      from: "LHR",
-      to: "DXB",
-      depart: "14:00",
-      arrive: "00:20+1",
-      duration: "7h 20m",
-      stops: "Non-stop",
-      price: 1412,
-      direct: true,
-    },
-    {
-      airline: "Lufthansa",
-      from: "LHR",
-      to: "DXB",
-      depart: "06:45",
-      arrive: "19:10",
-      duration: "9h 25m",
-      stops: "1 stop in FRA",
-      price: 318,
-      direct: false,
-    },
-    {
-      airline: "Singapore Airlines",
-      from: "LHR",
-      to: "DXB",
-      depart: "21:55",
-      arrive: "10:15+1",
-      duration: "7h 20m",
-      stops: "Non-stop",
-      price: 580,
-      direct: true,
-    },
-  ];
+
   const checkedAirlines = Object.keys(checks).filter((label) => checks[label]);
   const visibleFlights = flights.filter((f) => {
     const okPrice = f.price <= maxPrice;

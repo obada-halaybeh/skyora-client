@@ -1,0 +1,121 @@
+import TopNav from "../components/layout/TopNav";
+import Footer from "../components/layout/Footer";
+import BookingPanel from "../components/common/BookingPanel";
+import SeatMap from "../components/flights/SeatMap";
+import { useParams } from "react-router-dom";
+import { flights } from "../data/flights";
+
+export default function FlightDetail() {
+  const { id } = useParams();
+  const flight = flights.find((f) => f.id === Number(id));
+  if (!flight) {
+    return <p className="p-10 text-center">Flight not found.</p>;
+  }
+  const baggage = [
+    { icon: "👜", title: "Hand Luggage", desc: "1 piece, 7kg, cabin" },
+    { icon: "🧳", title: "Checked Bag", desc: "1 piece, 23kg included" },
+    { icon: "🎒", title: "Personal Item", desc: "1 small bag, free" },
+  ];
+
+  const tags = ["May 15, 2026", "Boeing 777-300ER", "Fully Refundable"];
+
+  return (
+    <div className="bg-canvas min-h-screen">
+      <TopNav activeTab="Flights" />
+
+      <div className="max-w-[1200px] mx-auto px-8 py-10">
+        <div className="flex gap-12">
+          {/* LEFT: main content */}
+          <div className="flex-1">
+            {/* Route header */}
+            <div className="mb-8">
+              <p className="text-[13px] text-ash font-medium mb-2">
+                {flight.airline} · Economy · {flight.flightNo}
+              </p>
+              <div className="flex items-center gap-6 mb-4">
+                {/* Departure */}
+                <div>
+                  <p className="text-5xl font-extrabold">{flight.depart}</p>
+                  <p className="text-base font-bold mt-1">{flight.fromCity}</p>
+                  <p className="text-sm text-ash">{flight.fromTerminal}</p>
+                </div>
+
+                {/* Middle */}
+                <div className="flex-1 text-center">
+                  <p className="text-[13px] text-ash font-medium">
+                    {flight.duration} ·{" "}
+                    {flight.direct ? "Non-stop" : flight.stops}
+                  </p>
+                  <div className="flex items-center gap-1 my-2">
+                    <div className="h-0.5 flex-1 bg-hairline" />
+                    <span className="text-lg">✈</span>
+                    <div className="h-0.5 flex-1 bg-hairline" />
+                  </div>
+                  {flight.direct && (
+                    <p className="text-[11px] text-success font-bold">
+                      DIRECT FLIGHT
+                    </p>
+                  )}
+                </div>
+
+                {/* Arrival */}
+                <div className="text-right">
+                  <p className="text-5xl font-extrabold">{flight.arrive}</p>
+                  <p className="text-base font-bold mt-1">{flight.toCity}</p>
+                  <p className="text-sm text-ash">{flight.toTerminal}</p>
+                </div>
+              </div>
+
+              {/* Tags */}
+              <div className="flex gap-3">
+                {[flight.date, flight.aircraft, "Fully Refundable"].map((t) => (
+                  <span
+                    key={t}
+                    className="bg-cloud text-ash text-[13px] font-medium px-3 py-1.5 rounded-lg"
+                  >
+                    {t}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            {/* Baggage */}
+            <div className="border-t border-hairline pt-8 mb-8">
+              <h2 className="text-xl font-bold mb-4">Baggage Policy</h2>
+              <div className="grid grid-cols-3 gap-4">
+                {baggage.map((b) => (
+                  <div key={b.title} className="bg-cloud rounded-xl p-4">
+                    <div className="text-2xl mb-2">{b.icon}</div>
+                    <p className="text-sm font-bold">{b.title}</p>
+                    <p className="text-[13px] text-ash font-medium mt-1">
+                      {b.desc}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Seat map */}
+            <div className="border-t border-hairline pt-8">
+              <h2 className="text-xl font-bold mb-5">Select Your Seat</h2>
+              <SeatMap />
+            </div>
+          </div>
+
+          {/* RIGHT: sticky booking panel */}
+          <div className="shrink-0">
+            <div className="sticky top-[100px]">
+              <BookingPanel
+                price={flight.price}
+                unit="per person"
+                cta="Reserve Now"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <Footer />
+    </div>
+  );
+}
