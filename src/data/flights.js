@@ -10,7 +10,6 @@ export const flights = [
     stops: "1 stop",
     price: 429,
     direct: false,
-    // extra detail-page fields:
     fromCity: "London Heathrow",
     toCity: "Dubai International",
     fromTerminal: "Terminal 3 · LHR",
@@ -18,6 +17,20 @@ export const flights = [
     flightNo: "EK002",
     aircraft: "Boeing 777-300ER",
     date: "May 15, 2026",
+    reviews: [
+      {
+        name: "Daniel R.",
+        rating: 5,
+        date: "April 2026",
+        text: "Smooth flight, friendly crew, and the entertainment system was excellent. Would fly Emirates again without hesitation.",
+      },
+      {
+        name: "Leila H.",
+        rating: 4,
+        date: "March 2026",
+        text: "Comfortable seats and good food. The layover was a bit long but overall a pleasant journey.",
+      },
+    ],
   },
   {
     id: 2,
@@ -37,6 +50,20 @@ export const flights = [
     flightNo: "BA107",
     aircraft: "Airbus A380",
     date: "May 15, 2026",
+    reviews: [
+      {
+        name: "Mark T.",
+        rating: 4,
+        date: "April 2026",
+        text: "Solid service and the A380 is very quiet. Boarding was well organised and on time.",
+      },
+      {
+        name: "Priya S.",
+        rating: 5,
+        date: "February 2026",
+        text: "Great crew and comfortable cabin. The connecting flight was easy to catch.",
+      },
+    ],
   },
   {
     id: 3,
@@ -56,6 +83,26 @@ export const flights = [
     flightNo: "EK002",
     aircraft: "Boeing 777-300ER",
     date: "May 15, 2026",
+    reviews: [
+      {
+        name: "Sophie L.",
+        rating: 5,
+        date: "April 2026",
+        text: "Direct and on time. The non-stop option made the whole trip so much easier. Highly recommend.",
+      },
+      {
+        name: "Omar A.",
+        rating: 5,
+        date: "March 2026",
+        text: "Excellent flight from start to finish. Comfortable, punctual, and great service throughout.",
+      },
+      {
+        name: "Hannah W.",
+        rating: 4,
+        date: "January 2026",
+        text: "Very good experience overall. Seat was roomy and the meals were better than expected.",
+      },
+    ],
   },
   {
     id: 4,
@@ -75,6 +122,14 @@ export const flights = [
     flightNo: "LH907",
     aircraft: "Airbus A350",
     date: "May 15, 2026",
+    reviews: [
+      {
+        name: "Thomas K.",
+        rating: 4,
+        date: "March 2026",
+        text: "Good value for the price. The Frankfurt connection was tight but I made it fine. Clean aircraft.",
+      },
+    ],
   },
   {
     id: 5,
@@ -94,5 +149,19 @@ export const flights = [
     flightNo: "SQ305",
     aircraft: "Airbus A380",
     date: "May 15, 2026",
+    reviews: [
+      {
+        name: "Grace C.",
+        rating: 5,
+        date: "April 2026",
+        text: "Singapore Airlines never disappoints. The overnight flight was restful and the service was world-class.",
+      },
+      {
+        name: "Raj P.",
+        rating: 5,
+        date: "February 2026",
+        text: "Best airline I've flown with. Spotless cabin, attentive crew, and the food was genuinely good.",
+      },
+    ],
   },
 ];

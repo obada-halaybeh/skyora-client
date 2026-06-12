@@ -1,18 +1,23 @@
 import Button from "../common/Button";
 import Stars from "./Stars";
+import { Link } from "react-router-dom";
 
 export default function HotelCard({
+  id,
   name,
   location,
   stars,
   rating,
-  reviews,
+  reviewCount,
   price,
   imgSeed,
   amenities,
 }) {
   return (
-    <div className="bg-canvas border border-hairline rounded-2xl overflow-hidden cursor-pointer hover:shadow-card-hover transition-shadow">
+    <Link
+      to={`/hotels/${id}`}
+      className="bg-canvas border border-hairline rounded-2xl overflow-hidden cursor-pointer hover:shadow-card-hover transition-shadow"
+    >
       <img
         src={`https://picsum.photos/seed/${imgSeed}/400/220`}
         alt={name}
@@ -33,7 +38,7 @@ export default function HotelCard({
         </p>
 
         {/* Review count */}
-        <p className="text-[12px] text-ash mb-3">{reviews} reviews</p>
+        <p className="text-[12px] text-ash mb-3">{reviewCount} reviews</p>
 
         {/* Amenities */}
         <div className="flex gap-1.5 flex-wrap mb-4">
@@ -58,6 +63,6 @@ export default function HotelCard({
           </Button>
         </div>
       </div>
-    </div>
+    </Link>
   );
 }
