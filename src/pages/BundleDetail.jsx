@@ -5,6 +5,7 @@ import BookingPanel from "../components/common/BookingPanel";
 import ReviewsSection from "../components/common/ReviewsSection";
 import AirlineLogo from "../components/flights/AirlineLogo";
 import { bundles } from "../data/bundles";
+import { Link } from "react-router-dom";
 
 export default function BundleDetail() {
   const { id } = useParams();
@@ -152,11 +153,13 @@ export default function BundleDetail() {
           {/* RIGHT: sticky booking panel */}
           <div className="shrink-0">
             <div className="sticky top-[100px]">
-              <BookingPanel
-                price={bundle.price}
-                unit="total package"
-                cta="Book Package"
-              />
+              <Link to={`/checkout/bundle/${bundle.id}`}>
+                <BookingPanel
+                  price={bundle.price}
+                  unit="total package"
+                  cta="Book Package"
+                />
+              </Link>
             </div>
           </div>
         </div>

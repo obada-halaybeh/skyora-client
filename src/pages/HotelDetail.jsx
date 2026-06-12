@@ -6,10 +6,18 @@ import Stars from "../components/hotels/Stars";
 import Button from "../components/common/Button";
 import { hotels } from "../data/hotels";
 import ReviewsSection from "../components/common/ReviewsSection";
+import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 
 export default function HotelDetail() {
   const { id } = useParams();
   const hotel = hotels.find((h) => h.id === Number(id));
+
+  const [selectedRoom, setSelectedRoom] = useState(null);
+
+  useEffect(() => {
+    if (selectedRoom) localStorage.setItem("skyora_room", selectedRoom);
+  }, [selectedRoom]);
 
   if (!hotel) {
     return <p className="p-10 text-center">Hotel not found.</p>;
@@ -92,38 +100,49 @@ export default function HotelDetail() {
             <div className="border-b border-hairline pb-8 mb-8">
               <h2 className="text-xl font-bold mb-5">Available Rooms</h2>
               <div className="flex flex-col gap-4">
-                {hotel.rooms.map((room) => (
-                  <div
-                    key={room.type}
-                    className="flex gap-5 border border-hairline rounded-2xl overflow-hidden"
-                  >
-                    <img
-                      src={`https://picsum.photos/seed/${room.imgSeed}/300/180`}
-                      alt={room.type}
-                      className="w-[220px] h-[150px] object-cover shrink-0"
-                    />
-                    <div className="py-5 pr-5 flex-1 flex flex-col justify-between">
-                      <div>
-                        <h3 className="text-lg font-bold mb-1">{room.type}</h3>
-                        <p className="text-[13px] text-ash font-medium">
-                          {room.size} · {room.guests} guests
-                        </p>
-                      </div>
-                      <div className="flex justify-between items-center">
-                        <p className="text-xl font-bold">
-                          ${room.price}
-                          <span className="text-[13px] text-ash font-medium">
-                            {" "}
-                            / night
-                          </span>
-                        </p>
-                        <Button variant="primary" size="sm">
-                          Reserve
-                        </Button>
+                {hotel.rooms.map((room) => {
+                  const picked = selectedRoom === room.type;
+                  return (
+                    <div
+                      key={room.type}
+                      className={`flex gap-5 border rounded-2xl overflow-hidden transition-all ${
+                        picked ? "border-rausch" : "border-hairline"
+                      }`}
+                    >
+                      <img
+                        src={`https://picsum.photos/seed/${room.imgSeed}/300/180`}
+                        alt={room.type}
+                        className="w-[220px] h-[150px] object-cover shrink-0"
+                      />
+                      <div className="py-5 pr-5 flex-1 flex flex-col justify-between">
+                        <div>
+                          <h3 className="text-lg font-bold mb-1">
+                            {room.type}
+                          </h3>
+                          <p className="text-[13px] text-ash font-medium">
+                            {room.size} · {room.guests} guests
+                          </p>
+                        </div>
+                        <div className="flex justify-between items-center">
+                          <p className="text-xl font-bold">
+                            ${room.price}
+                            <span className="text-[13px] text-ash font-medium">
+                              {" "}
+                              / night
+                            </span>
+                          </p>
+                          <Button
+                            variant={picked ? "primary" : "secondary"}
+                            size="sm"
+                            onClick={() => setSelectedRoom(room.type)}
+                          >
+                            {picked ? "Selected" : "Select"}
+                          </Button>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
             <ReviewsSection title="Guest Reviews" reviews={hotel.reviews} />
@@ -132,11 +151,13 @@ export default function HotelDetail() {
           {/* RIGHT: sticky booking panel */}
           <div className="shrink-0">
             <div className="sticky top-[100px]">
-              <BookingPanel
-                price={hotel.price}
-                unit="per night"
-                cta="Reserve"
-              />
+              <Link to={`/checkout/hotel/${hotel.id}`}>
+                <BookingPanel
+                  price={hotel.price}
+                  unit="per night"
+                  cta="Reserve"
+                />
+              </Link>
             </div>
           </div>
         </div>

@@ -1,8 +1,5 @@
-import { useState } from "react";
-
-export default function SeatMap() {
+export default function SeatMap({ selected, setSelected }) {
   const takenSeats = ["1A", "1C", "2B", "3D", "4A", "5F", "6C", "7E"];
-  const [selected, setSelected] = useState(null);
 
   const rows = [1, 2, 3, 4, 5, 6, 7, 8];
   const leftCols = ["A", "B", "C"];
@@ -16,7 +13,6 @@ export default function SeatMap() {
 
   const Seat = ({ seatId }) => {
     const status = getStatus(seatId);
-
     const colors = {
       available: "bg-[#d4edda] hover:brightness-95 cursor-pointer",
       taken: "bg-hairline cursor-not-allowed",
@@ -53,10 +49,9 @@ export default function SeatMap() {
         </span>
       </div>
 
-      {/* Seat grid */}
+      {/* Grid */}
       <div className="flex justify-center">
         <div className="inline-block">
-          {/* Column headers */}
           <div className="flex gap-1.5 mb-2 pl-7">
             {leftCols.map((c) => (
               <div
@@ -77,19 +72,15 @@ export default function SeatMap() {
             ))}
           </div>
 
-          {/* Rows */}
           {rows.map((row) => (
             <div key={row} className="flex items-center gap-1.5 mb-1.5">
               <div className="w-5 text-[11px] font-semibold text-ash text-center">
                 {row}
               </div>
-
               {leftCols.map((col) => (
                 <Seat key={col} seatId={`${row}${col}`} />
               ))}
-
               <div className="w-5" />
-
               {rightCols.map((col) => (
                 <Seat key={col} seatId={`${row}${col}`} />
               ))}
@@ -98,7 +89,6 @@ export default function SeatMap() {
         </div>
       </div>
 
-      {/* Selected seat info */}
       <p className="text-center text-sm font-medium mt-5">
         {selected ? (
           <>
