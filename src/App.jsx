@@ -5,6 +5,7 @@ import TopNav from "./components/layout/TopNav";
 import Footer from "./components/layout/Footer";
 import Home from "./pages/Home";
 import Flights from "./pages/Flights";
+import Hotels from "./pages/Hotels";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/auth" element={<Auth />} />
           <Route path="/flights" element={<Flights />} />
+          <Route path="/hotels" element={<Hotels />} />
         </Routes>
         {/* <Footer /> */}
       </Router>

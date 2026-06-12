@@ -1,7 +1,7 @@
 import TopNav from "../components/layout/TopNav";
 import Footer from "../components/layout/Footer";
 import SearchPill from "../components/home/SearchPill";
-import FilterSidebar from "../components/flights/FilterSidebar";
+import FilterSidebar from "../components/common/FilterSidebar";
 import FlightCard from "../components/flights/FlightCard";
 import { useState } from "react";
 
@@ -93,6 +93,14 @@ export default function Flights() {
           setMaxPrice={setMaxPrice}
           checks={checks}
           toggle={toggle}
+          groupTitle="Airlines"
+          options={[
+            "Emirates",
+            "Lufthansa",
+            "British Airways",
+            "Singapore Airlines",
+            "Qatar Airways",
+          ]}
         />
 
         <div className="flex-1">
