@@ -5,10 +5,20 @@ import SeatMap from "../components/flights/SeatMap";
 import { useParams } from "react-router-dom";
 import { flights } from "../data/flights";
 import ReviewsSection from "../components/common/ReviewsSection";
+import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 
 export default function FlightDetail() {
   const { id } = useParams();
   const flight = flights.find((f) => f.id === Number(id));
+  const [selectedSeat, setSelectedSeat] = useState(null);
+
+  useEffect(() => {
+    if (selectedSeat) {
+      localStorage.setItem("skyora_seat", selectedSeat);
+    }
+  }, [selectedSeat]);
+
   if (!flight) {
     return <p className="p-10 text-center">Flight not found.</p>;
   }
@@ -99,7 +109,7 @@ export default function FlightDetail() {
             {/* Seat map */}
             <div className="border-t border-hairline pt-8">
               <h2 className="text-xl font-bold mb-5">Select Your Seat</h2>
-              <SeatMap />
+              <SeatMap selected={selectedSeat} setSelected={setSelectedSeat} />
             </div>
             <div className="mt-8">
               <ReviewsSection
@@ -112,11 +122,13 @@ export default function FlightDetail() {
           {/* RIGHT: sticky booking panel */}
           <div className="shrink-0">
             <div className="sticky top-[100px]">
-              <BookingPanel
-                price={flight.price}
-                unit="per person"
-                cta="Reserve Now"
-              />
+              <Link to={`/checkout/flight/${flight.id}`}>
+                <BookingPanel
+                  price={flight.price}
+                  unit="per person"
+                  cta="Reserve Now"
+                />
+              </Link>
             </div>
           </div>
         </div>
