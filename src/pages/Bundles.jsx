@@ -4,6 +4,7 @@ import Footer from "../components/layout/Footer";
 import SearchPill from "../components/home/SearchPill";
 import FilterSidebar from "../components/common/FilterSidebar";
 import BundleCard from "../components/home/BundleCard";
+import { bundles } from "../data/bundles";
 
 export default function Bundles() {
   const [maxPrice, setMaxPrice] = useState(2000);
@@ -12,69 +13,6 @@ export default function Bundles() {
   const toggle = (label) => {
     setChecks({ ...checks, [label]: !checks[label] });
   };
-
-  const bundles = [
-    {
-      title: "Dubai Luxury Escape",
-      dest: "Dubai, UAE",
-      flight: "Emirates · Direct",
-      hotel: "Burj Al Arab",
-      nights: 5,
-      price: 1290,
-      original: 1680,
-      imgSeed: 159,
-    },
-    {
-      title: "Paris City Break",
-      dest: "Paris, France",
-      flight: "Air France · Direct",
-      hotel: "Le Meurice",
-      nights: 4,
-      price: 980,
-      original: 1240,
-      imgSeed: 237,
-    },
-    {
-      title: "Tokyo Discovery",
-      dest: "Tokyo, Japan",
-      flight: "Singapore Air · 1 stop",
-      hotel: "Park Hyatt Tokyo",
-      nights: 7,
-      price: 1840,
-      original: 2380,
-      imgSeed: 26,
-    },
-    {
-      title: "Bali Retreat",
-      dest: "Bali, Indonesia",
-      flight: "Qatar Airways · 1 stop",
-      hotel: "COMO Uma Ubud",
-      nights: 8,
-      price: 1420,
-      original: 1880,
-      imgSeed: 488,
-    },
-    {
-      title: "New York Weekender",
-      dest: "New York, USA",
-      flight: "British Airways · Direct",
-      hotel: "The Plaza Hotel",
-      nights: 3,
-      price: 870,
-      original: 1120,
-      imgSeed: 164,
-    },
-    {
-      title: "Maldives Overwater",
-      dest: "Maldives",
-      flight: "Emirates · Direct",
-      hotel: "Soneva Jani",
-      nights: 6,
-      price: 3200,
-      original: 4100,
-      imgSeed: 15,
-    },
-  ];
 
   const checkedLengths = Object.keys(checks).filter((label) => checks[label]);
 

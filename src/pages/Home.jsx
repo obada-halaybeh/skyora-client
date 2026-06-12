@@ -4,6 +4,7 @@ import TopNav from "../components/layout/TopNav";
 import SearchPill from "../components/home/SearchPill";
 import BundleCard from "../components/home/BundleCard";
 import Footer from "../components/layout/Footer";
+import { bundles } from "../data/bundles";
 
 export default function Home() {
   const destinations = [
@@ -13,39 +14,6 @@ export default function Home() {
     { city: "New York", price: 290, seed: 164 },
     { city: "Maldives", price: 890, seed: 15 },
     { city: "Bali", price: 540, seed: 488 },
-  ];
-
-  const bundles = [
-    {
-      title: "Dubai Escape",
-      dest: "Dubai, UAE",
-      flight: "Emirates · 7h 20m",
-      hotel: "Burj Al Arab",
-      nights: 5,
-      price: 1290,
-      original: 1680,
-      imgSeed: 159,
-    },
-    {
-      title: "Paris Romance",
-      dest: "Paris, France",
-      flight: "Air France · 1h 40m",
-      hotel: "Le Meurice",
-      nights: 4,
-      price: 980,
-      original: 1240,
-      imgSeed: 237,
-    },
-    {
-      title: "Tokyo Adventure",
-      dest: "Tokyo, Japan",
-      flight: "Singapore Air · 12h",
-      hotel: "Park Hyatt Tokyo",
-      nights: 7,
-      price: 1840,
-      original: 2380,
-      imgSeed: 26,
-    },
   ];
 
   const trustItems = [
@@ -131,8 +99,8 @@ export default function Home() {
             Flight + hotel, better together
           </p>
           <div className="grid grid-cols-3 gap-6">
-            {bundles.map((b) => (
-              <BundleCard key={b.title} {...b} />
+            {bundles.slice(0, 3).map((b) => (
+              <BundleCard key={b.id} {...b} />
             ))}
           </div>
         </section>

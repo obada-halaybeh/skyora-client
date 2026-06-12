@@ -1,7 +1,9 @@
 import React from "react";
 import Button from "../common/Button";
+import { Link } from "react-router-dom";
 
 export default function BundleCard({
+  id,
   title,
   dest,
   flight,
@@ -13,7 +15,10 @@ export default function BundleCard({
 }) {
   const savings = Math.round((1 - price / original) * 100);
   return (
-    <div className="block bg-canvas border border-hairline rounded-[20px] overflow-hidden hover:shadow-card-hover transition-shadow cursor-pointer">
+    <Link
+      to={`/bundles/${id}`}
+      className="block bg-canvas border border-hairline rounded-[20px] overflow-hidden hover:shadow-card-hover transition-shadow cursor-pointer"
+    >
       <div className="relative">
         <img
           src={`https://picsum.photos/seed/${imgSeed}/600/250`}
@@ -55,6 +60,6 @@ export default function BundleCard({
           </Button>
         </div>
       </div>
-    </div>
+    </Link>
   );
 }
