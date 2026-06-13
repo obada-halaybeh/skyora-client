@@ -11,6 +11,7 @@ import FlightDetail from "./pages/FlightDetail";
 import HotelDetail from "./pages/HotelDetail";
 import BundleDetail from "./pages/BundleDetail";
 import Checkout from "./pages/Checkout";
+import Confirmation from "./pages/Confirmation";
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
           <Route path="/hotels/:id" element={<HotelDetail />} />
           <Route path="/bundles/:id" element={<BundleDetail />} />
           <Route path="/checkout/:type/:id" element={<Checkout />} />
+          <Route path="/confirmation/:type/:id" element={<Confirmation />} />
         </Routes>
         {/* <Footer /> */}
       </Router>

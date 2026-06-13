@@ -8,17 +8,16 @@ import SeatMap from "../components/flights/SeatMap";
 import { bundles } from "../data/bundles";
 import { hotels } from "../data/hotels";
 import { flights } from "../data/flights";
+import { Link } from "react-router-dom";
 
 export default function Checkout() {
   const { type, id } = useParams();
 
-  // ── Figure out what's being booked, based on the URL type ──
-  // We build a normalized "item" so the rest of the page doesn't care about type.
-  let item = null; // the raw data object
-  let rooms = []; // room options (hotel + bundle only)
-  let showSeat = false; // does step 2 show the seat map?
-  let showRoom = false; // does step 2 show the room picker?
-  let summary = null; // { title, sub1, sub2, imgSeed, basePrice }
+  let item = null;
+  let rooms = [];
+  let showSeat = false;
+  let showRoom = false;
+  let summary = null;
 
   if (type === "flight") {
     item = flights.find((f) => f.id === Number(id));
@@ -62,10 +61,8 @@ export default function Checkout() {
     }
   }
 
-  // Unique localStorage prefix per booking, e.g. "checkout_flight_3_"
   const keyPrefix = `checkout_${type}_${id}_`;
 
-  // ── State (loaded from localStorage if present) ──
   const [step, setStep] = useState(
     Number(localStorage.getItem(keyPrefix + "step")) || 1,
   );
@@ -84,7 +81,6 @@ export default function Checkout() {
         };
   });
 
-  // Pre-fill seat: bundle starts fresh; flight reads what was picked on flight detail
   const [selectedSeat, setSelectedSeat] = useState(() => {
     if (type === "flight") {
       return (
@@ -96,7 +92,6 @@ export default function Checkout() {
     return localStorage.getItem(keyPrefix + "seat") || null;
   });
 
-  // Pre-fill room: bundle starts fresh; hotel reads what was picked on hotel detail
   const [selectedRoom, setSelectedRoom] = useState(() => {
     if (type === "hotel") {
       return (
@@ -108,7 +103,6 @@ export default function Checkout() {
     return localStorage.getItem(keyPrefix + "room") || null;
   });
 
-  // ── Save each piece when it changes ──
   useEffect(() => {
     localStorage.setItem(keyPrefix + "step", step);
   }, [step, keyPrefix]);
@@ -125,7 +119,6 @@ export default function Checkout() {
     if (selectedRoom) localStorage.setItem(keyPrefix + "room", selectedRoom);
   }, [selectedRoom, keyPrefix]);
 
-  // Guard: bad type or id
   if (!item) {
     return <p className="p-10 text-center">Booking not found.</p>;
   }
@@ -136,7 +129,6 @@ export default function Checkout() {
     setTraveler({ ...traveler, [field]: value });
   };
 
-  // ── Price: base + chosen room (room only applies if shown) ──
   const chosenRoom = rooms.find((r) => r.type === selectedRoom);
   const roomCost = showRoom && chosenRoom ? chosenRoom.price : 0;
   const total = summary.basePrice + roomCost;
@@ -146,7 +138,6 @@ export default function Checkout() {
     localStorage.removeItem(keyPrefix + "traveler");
     localStorage.removeItem(keyPrefix + "seat");
     localStorage.removeItem(keyPrefix + "room");
-    alert("Booking confirmed! (demo)");
   };
 
   return (
@@ -350,9 +341,11 @@ export default function Checkout() {
                 >
                   Back
                 </Button>
-                <Button variant="gradient" size="lg" onClick={handleConfirm}>
-                  Confirm Booking
-                </Button>
+                <Link to={`/confirmation/${type}/${id}`}>
+                  <Button variant="gradient" size="lg" onClick={handleConfirm}>
+                    Confirm Booking
+                  </Button>
+                </Link>
               </div>
             </>
           )}
