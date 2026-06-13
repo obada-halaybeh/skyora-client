@@ -38,9 +38,12 @@ export default function TopNav({ activeTab = "" }) {
         >
           Sign In
         </Link>
-        <div className="w-9 h-9 rounded-full bg-skyora-gradient flex items-center justify-center text-white text-[13px] font-bold border border-hairline cursor-pointer">
+        <Link
+          to="/trips"
+          className="w-9 h-9 rounded-full bg-skyora-gradient flex items-center justify-center text-white text-[13px] font-bold border border-hairline cursor-pointer"
+        >
           S
-        </div>
+        </Link>
       </div>
     </nav>
   );

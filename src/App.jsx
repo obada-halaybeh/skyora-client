@@ -12,6 +12,7 @@ import HotelDetail from "./pages/HotelDetail";
 import BundleDetail from "./pages/BundleDetail";
 import Checkout from "./pages/Checkout";
 import Confirmation from "./pages/Confirmation";
+import Trips from "./pages/Trips";
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
           <Route path="/bundles/:id" element={<BundleDetail />} />
           <Route path="/checkout/:type/:id" element={<Checkout />} />
           <Route path="/confirmation/:type/:id" element={<Confirmation />} />
+          <Route path="/trips" element={<Trips />} />
         </Routes>
         {/* <Footer /> */}
       </Router>
