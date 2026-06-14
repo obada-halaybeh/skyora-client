@@ -14,6 +14,7 @@ import Checkout from "./pages/Checkout";
 import Confirmation from "./pages/Confirmation";
 import Trips from "./pages/Trips";
 import AdminFlights from "./pages/admin/AdminFlights";
+import AdminHotels from "./pages/admin/AdminHotels";
 
 function App() {
   return (
@@ -34,6 +35,7 @@ function App() {
           <Route path="/confirmation/:type/:id" element={<Confirmation />} />
           <Route path="/trips" element={<Trips />} />
           <Route path="/admin/flights" element={<AdminFlights />} />
+          <Route path="/admin/hotels" element={<AdminHotels />} />
         </Routes>
         {/* <Footer /> */}
       </Router>
