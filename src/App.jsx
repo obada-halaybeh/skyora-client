@@ -16,6 +16,8 @@ import Trips from "./pages/Trips";
 import AdminFlights from "./pages/admin/AdminFlights";
 import AdminHotels from "./pages/admin/AdminHotels";
 import AdminBundles from "./pages/admin/AdminBundles";
+import AdminBookings from "./pages/admin/AdminBookings";
+import AdminUsers from "./pages/admin/AdminUsers";
 
 function App() {
   return (
@@ -38,6 +40,8 @@ function App() {
           <Route path="/admin/flights" element={<AdminFlights />} />
           <Route path="/admin/hotels" element={<AdminHotels />} />
           <Route path="/admin/bundles" element={<AdminBundles />} />
+          <Route path="/admin/bookings" element={<AdminBookings />} />;
+          <Route path="/admin/users" element={<AdminUsers />} />
         </Routes>
         {/* <Footer /> */}
       </Router>
