@@ -1,23 +1,14 @@
 import { Link } from "react-router-dom";
-import {
-  LayoutDashboard,
-  Plane,
-  BedDouble,
-  Gift,
-  Ticket,
-  Users,
-} from "lucide-react";
+import { Plane, BedDouble, Gift, Ticket, Users } from "lucide-react";
 
 export default function AdminSidebar({ active }) {
   const links = [
-    { label: "Dashboard", to: "/admin", Icon: LayoutDashboard },
     { label: "Flights", to: "/admin/flights", Icon: Plane },
     { label: "Hotels", to: "/admin/hotels", Icon: BedDouble },
     { label: "Bundles", to: "/admin/bundles", Icon: Gift },
     { label: "Bookings", to: "/admin/bookings", Icon: Ticket },
     { label: "Users", to: "/admin/users", Icon: Users },
   ];
-
   return (
     <div className="w-[240px] bg-ink min-h-screen p-5 shrink-0">
       <div className="text-white text-xl font-extrabold mb-8 px-2">
