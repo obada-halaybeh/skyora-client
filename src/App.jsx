@@ -13,6 +13,7 @@ import BundleDetail from "./pages/BundleDetail";
 import Checkout from "./pages/Checkout";
 import Confirmation from "./pages/Confirmation";
 import Trips from "./pages/Trips";
+import AdminFlights from "./pages/admin/AdminFlights";
 
 function App() {
   return (
@@ -32,6 +33,7 @@ function App() {
           <Route path="/checkout/:type/:id" element={<Checkout />} />
           <Route path="/confirmation/:type/:id" element={<Confirmation />} />
           <Route path="/trips" element={<Trips />} />
+          <Route path="/admin/flights" element={<AdminFlights />} />
         </Routes>
         {/* <Footer /> */}
       </Router>
