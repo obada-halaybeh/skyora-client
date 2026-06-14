@@ -15,6 +15,7 @@ import Confirmation from "./pages/Confirmation";
 import Trips from "./pages/Trips";
 import AdminFlights from "./pages/admin/AdminFlights";
 import AdminHotels from "./pages/admin/AdminHotels";
+import AdminBundles from "./pages/admin/AdminBundles";
 
 function App() {
   return (
@@ -36,6 +37,7 @@ function App() {
           <Route path="/trips" element={<Trips />} />
           <Route path="/admin/flights" element={<AdminFlights />} />
           <Route path="/admin/hotels" element={<AdminHotels />} />
+          <Route path="/admin/bundles" element={<AdminBundles />} />
         </Routes>
         {/* <Footer /> */}
       </Router>
