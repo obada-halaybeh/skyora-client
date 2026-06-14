@@ -17,6 +17,7 @@ const EMPTY_FORM = {
   stars: "",
   rooms: "",
   price: "",
+  amenities: "",
   status: "Active",
 };
 
@@ -54,6 +55,7 @@ export default function AdminHotels() {
       stars: hotel.stars,
       rooms: hotel.rooms,
       price: hotel.price,
+      amenities: hotel.amenities.join(", "), // ["Pool","WiFi"] → "Pool, WiFi"
       status: hotel.status,
     });
     setDrawerOpen(true);
@@ -65,6 +67,11 @@ export default function AdminHotels() {
       stars: Number(form.stars),
       rooms: Number(form.rooms),
       price: Number(form.price),
+      // "Pool, WiFi" → ["Pool", "WiFi"]
+      amenities: form.amenities
+        .split(",")
+        .map((a) => a.trim())
+        .filter((a) => a.length > 0),
     };
     if (editingId) {
       await updateHotel(editingId, payload);
@@ -190,6 +197,12 @@ export default function AdminHotels() {
             placeholder="980"
             value={form.price}
             onChange={(e) => setField("price", e.target.value)}
+          />
+          <Input
+            label="AMENITIES (comma-separated)"
+            placeholder="Pool, Spa, WiFi, Restaurant"
+            value={form.amenities}
+            onChange={(e) => setField("amenities", e.target.value)}
           />
           <div>
             <label className="block text-[12px] font-bold mb-1.5 tracking-wide">

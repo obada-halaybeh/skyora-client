@@ -6,6 +6,7 @@ export let adminHotels = [
     stars: 5,
     rooms: 202,
     price: 980,
+    amenities: ["Pool", "Spa", "WiFi", "Restaurant"],
     status: "Active",
   },
   {
@@ -15,6 +16,7 @@ export let adminHotels = [
     stars: 5,
     rooms: 1548,
     price: 620,
+    amenities: ["Waterpark", "Pool", "Spa", "WiFi"],
     status: "Active",
   },
   {
@@ -24,6 +26,7 @@ export let adminHotels = [
     stars: 5,
     rooms: 282,
     price: 750,
+    amenities: ["WiFi", "Gym", "Bar"],
     status: "Active",
   },
   {
@@ -33,6 +36,7 @@ export let adminHotels = [
     stars: 5,
     rooms: 155,
     price: 680,
+    amenities: ["Pool", "Spa", "WiFi", "Gym"],
     status: "Active",
   },
   {
@@ -42,6 +46,7 @@ export let adminHotels = [
     stars: 5,
     rooms: 160,
     price: 820,
+    amenities: ["WiFi", "Restaurant", "Bar"],
     status: "Inactive",
   },
   {
@@ -51,6 +56,7 @@ export let adminHotels = [
     stars: 4,
     rooms: 154,
     price: 180,
+    amenities: ["WiFi", "Pool", "Gym"],
     status: "Active",
   },
 ];

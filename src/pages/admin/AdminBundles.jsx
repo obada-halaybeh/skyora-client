@@ -14,6 +14,8 @@ import {
 const EMPTY_FORM = {
   title: "",
   destination: "",
+  flight: "",
+  hotel: "",
   nights: "",
   price: "",
   original: "",
@@ -51,6 +53,8 @@ export default function AdminBundles() {
     setForm({
       title: bundle.title,
       destination: bundle.destination,
+      flight: bundle.flight,
+      hotel: bundle.hotel,
       nights: bundle.nights,
       price: bundle.price,
       original: bundle.original,
@@ -169,6 +173,21 @@ export default function AdminBundles() {
             value={form.destination}
             onChange={(e) => setField("destination", e.target.value)}
           />
+
+          {/* NEW */}
+          <Input
+            label="FLIGHT"
+            placeholder="Emirates · Direct"
+            value={form.flight}
+            onChange={(e) => setField("flight", e.target.value)}
+          />
+          <Input
+            label="HOTEL"
+            placeholder="Burj Al Arab Jumeirah"
+            value={form.hotel}
+            onChange={(e) => setField("hotel", e.target.value)}
+          />
+
           <Input
             label="NIGHTS"
             type="number"
