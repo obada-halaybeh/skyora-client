@@ -1,5 +1,4 @@
 import Button from "../common/Button";
-import StatusPill from "./StatusPill";
 
 export default function TripCard({ trip, tab, onReview, onCancel, reviewed }) {
   return (

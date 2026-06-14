@@ -5,15 +5,20 @@ import SearchPill from "../components/home/SearchPill";
 import BundleCard from "../components/home/BundleCard";
 import Footer from "../components/layout/Footer";
 import { bundles } from "../data/bundles";
+import { useState } from "react";
 
 export default function Home() {
+  const [searchType, setSearchType] = useState("flights");
+  const [where, setWhere] = useState("");
+  const [dates, setDates] = useState("");
+
   const destinations = [
-    { city: "Dubai", price: 420, seed: 159 },
-    { city: "Paris", price: 310, seed: 237 },
-    { city: "Tokyo", price: 680, seed: 26 },
-    { city: "New York", price: 290, seed: 164 },
-    { city: "Maldives", price: 890, seed: 15 },
-    { city: "Bali", price: 540, seed: 488 },
+    { city: "Dubai", country: "UAE", price: 420, seed: 159 },
+    { city: "Paris", country: "France", price: 310, seed: 237 },
+    { city: "Tokyo", country: "Japan", price: 680, seed: 26 },
+    { city: "New York", country: "USA", price: 290, seed: 164 },
+    { city: "Maldives", country: "Maldives", price: 890, seed: 15 },
+    { city: "Bali", country: "Indonesia", price: 540, seed: 488 },
   ];
 
   const trustItems = [
@@ -62,7 +67,14 @@ export default function Home() {
               Flights, hotels and packages to over 500 destinations
             </p>
           </div>
-          <SearchPill />
+          <SearchPill
+            type={searchType}
+            setType={setSearchType}
+            where={where}
+            setWhere={setWhere}
+            dates={dates}
+            setDates={setDates}
+          />
         </div>
       </div>
 
@@ -74,7 +86,11 @@ export default function Home() {
           </p>
           <div className="flex gap-5 overflow-x-auto pb-2">
             {destinations.map((d) => (
-              <div key={d.city} className="shrink-0 w-[200px] cursor-pointer">
+              <div
+                key={d.city}
+                onClick={() => setWhere(d.country)}
+                className="shrink-0 w-[200px] cursor-pointer"
+              >
                 <img
                   src={`https://picsum.photos/seed/${d.seed}/200/150`}
                   alt={d.city}

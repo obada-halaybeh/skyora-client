@@ -5,10 +5,14 @@ import SearchPill from "../components/home/SearchPill";
 import FilterSidebar from "../components/common/FilterSidebar";
 import BundleCard from "../components/home/BundleCard";
 import { bundles } from "../data/bundles";
+import { useSearchParams } from "react-router-dom";
 
 export default function Bundles() {
   const [maxPrice, setMaxPrice] = useState(2000);
   const [checks, setChecks] = useState({});
+
+  const [searchParams] = useSearchParams();
+  const where = searchParams.get("where") || "";
 
   const toggle = (label) => {
     setChecks({ ...checks, [label]: !checks[label] });
@@ -27,15 +31,13 @@ export default function Bundles() {
     const okLength =
       checkedLengths.length === 0 ||
       checkedLengths.includes(bucketOf(b.nights));
-    return okPrice && okLength;
+    const okWhere =
+      where === "" || b.dest.toLowerCase().includes(where.toLowerCase());
+    return okPrice && okLength && okWhere;
   });
   return (
     <div className="bg-canvas min-h-screen">
       <TopNav activeTab="Bundles" />
-
-      <div className="bg-cloud border-b border-hairline px-8 py-4 flex justify-center">
-        <SearchPill where="Anywhere" dates="May 2026" travelers="2 adults" />
-      </div>
 
       {/* Main layout */}
       <div className="flex gap-8 px-8 py-8 max-w-[1300px] mx-auto">

@@ -31,6 +31,7 @@ export const flights = [
         text: "Comfortable seats and good food. The layover was a bit long but overall a pleasant journey.",
       },
     ],
+    country: "UAE",
   },
   {
     id: 2,
@@ -64,6 +65,7 @@ export const flights = [
         text: "Great crew and comfortable cabin. The connecting flight was easy to catch.",
       },
     ],
+    country: "UAE",
   },
   {
     id: 3,
@@ -103,6 +105,7 @@ export const flights = [
         text: "Very good experience overall. Seat was roomy and the meals were better than expected.",
       },
     ],
+    country: "UAE",
   },
   {
     id: 4,
@@ -130,6 +133,7 @@ export const flights = [
         text: "Good value for the price. The Frankfurt connection was tight but I made it fine. Clean aircraft.",
       },
     ],
+    country: "UAE",
   },
   {
     id: 5,
@@ -163,5 +167,6 @@ export const flights = [
         text: "Best airline I've flown with. Spotless cabin, attentive crew, and the food was genuinely good.",
       },
     ],
+    country: "UAE",
   },
 ];

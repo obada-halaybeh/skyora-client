@@ -5,10 +5,14 @@ import SearchPill from "../components/home/SearchPill";
 import FilterSidebar from "../components/common/FilterSidebar";
 import HotelCard from "../components/hotels/HotelCard";
 import { hotels } from "../data/hotels";
+import { useSearchParams } from "react-router-dom";
 
 export default function Hotels() {
   const [maxPrice, setMaxPrice] = useState(2000);
   const [checks, setChecks] = useState({});
+
+  const [searchParams] = useSearchParams();
+  const where = searchParams.get("where") || "";
 
   const toggle = (label) => {
     setChecks({ ...checks, [label]: !checks[label] });
@@ -20,16 +24,13 @@ export default function Hotels() {
     const okPrice = h.price <= maxPrice;
     const okStars =
       checkedStars.length === 0 || checkedStars.includes(`${h.stars} stars`);
-    return okPrice && okStars;
+    const okWhere =
+      where === "" || h.country.toLowerCase().includes(where.toLowerCase());
+    return okPrice && okStars && okWhere;
   });
   return (
     <div className="bg-canvas min-h-screen">
       <TopNav activeTab="Hotels" />
-
-      {/* Search strip */}
-      <div className="bg-cloud border-b border-hairline px-8 py-4 flex justify-center">
-        <SearchPill where="Dubai, UAE" dates="May 15–22" travelers="2 guests" />
-      </div>
 
       {/* Main layout */}
       <div className="flex gap-8 px-8 py-8 max-w-[1300px] mx-auto">

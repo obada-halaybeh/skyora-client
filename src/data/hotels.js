@@ -63,6 +63,7 @@ export const hotels = [
         imgSeed: 392,
       },
     ],
+    country: "UAE",
   },
   {
     id: 2,
@@ -115,6 +116,7 @@ export const hotels = [
         imgSeed: 394,
       },
     ],
+    country: "UAE",
   },
   {
     id: 3,
@@ -167,6 +169,7 @@ export const hotels = [
         imgSeed: 396,
       },
     ],
+    country: "UAE",
   },
   {
     id: 4,
@@ -219,6 +222,7 @@ export const hotels = [
         imgSeed: 398,
       },
     ],
+    country: "UAE",
   },
   {
     id: 5,
@@ -271,6 +275,7 @@ export const hotels = [
         imgSeed: 400,
       },
     ],
+    country: "UAE",
   },
   {
     id: 6,
@@ -323,5 +328,6 @@ export const hotels = [
         imgSeed: 402,
       },
     ],
+    country: "UAE",
   },
 ];
