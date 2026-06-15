@@ -5,57 +5,70 @@ import Footer from "../components/layout/Footer";
 import Button from "../components/common/Button";
 import Input from "../components/common/Input";
 import SeatMap from "../components/flights/SeatMap";
-import { bundles } from "../data/bundles";
-import { hotels } from "../data/hotels";
-import { flights } from "../data/flights";
+import { API } from "../config";
 import { Link } from "react-router-dom";
 
 export default function Checkout() {
   const { type, id } = useParams();
 
-  let item = null;
-  let rooms = [];
-  let showSeat = false;
-  let showRoom = false;
-  let summary = null;
+  // The item being booked (fetched from backend)
+  const [item, setItem] = useState(null);
+  const [rooms, setRooms] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  if (type === "flight") {
-    item = flights.find((f) => f.id === Number(id));
-    showSeat = true;
-    if (item) {
+  const showSeat = type === "flight" || type === "bundle";
+  const showRoom = type === "hotel" || type === "bundle";
+
+  // Fetch the flight/hotel/bundle being booked
+  useEffect(() => {
+    fetchItem();
+  }, [type, id]);
+
+  const fetchItem = async () => {
+    try {
+      const res = await fetch(`${API}/${type}s/${id}`);
+      const data = await res.json();
+      setItem(data);
+
+      // Rooms: hotel has its own; bundle pulls from its linked hotel
+      if (type === "hotel") {
+        setRooms(data.rooms || []);
+      } else if (type === "bundle" && data.hotel_id) {
+        const hotelRes = await fetch(`${API}/hotels/${data.hotel_id}`);
+        const hotelData = await hotelRes.json();
+        setRooms(hotelData.rooms || []);
+      }
+      setLoading(false);
+    } catch (err) {
+      setLoading(false);
+    }
+  };
+
+  // Build the summary once the item is loaded
+  let summary = null;
+  if (item) {
+    if (type === "flight") {
       summary = {
-        title: `${item.airline} · ${item.flightNo}`,
-        sub1: `${item.from} → ${item.to}`,
+        title: `${item.airline} · ${item.flight_no}`,
+        sub1: `${item.origin} → ${item.destination}`,
         sub2: `${item.depart} – ${item.arrive}`,
         imgSeed: 542,
         basePrice: item.price,
       };
-    }
-  } else if (type === "hotel") {
-    item = hotels.find((h) => h.id === Number(id));
-    showRoom = true;
-    if (item) {
-      rooms = item.rooms;
+    } else if (type === "hotel") {
       summary = {
         title: item.name,
         sub1: item.location,
         sub2: `${item.stars}-star hotel`,
-        imgSeed: item.imgSeed,
+        imgSeed: item.img_seed,
         basePrice: item.price,
       };
-    }
-  } else if (type === "bundle") {
-    item = bundles.find((b) => b.id === Number(id));
-    showSeat = true;
-    showRoom = true;
-    if (item) {
-      const hotel = hotels.find((h) => h.id === item.hotelId);
-      rooms = hotel ? hotel.rooms : [];
+    } else if (type === "bundle") {
       summary = {
         title: item.title,
-        sub1: `${item.dest} · ${item.travelers}`,
-        sub2: `${item.airline} · ${item.hotelName}`,
-        imgSeed: item.imgSeed,
+        sub1: `${item.destination} · ${item.travelers}`,
+        sub2: `${item.airline} · ${item.hotel_name}`,
+        imgSeed: item.img_seed,
         basePrice: item.price,
       };
     }
@@ -119,7 +132,12 @@ export default function Checkout() {
     if (selectedRoom) localStorage.setItem(keyPrefix + "room", selectedRoom);
   }, [selectedRoom, keyPrefix]);
 
-  if (!item) {
+  // Loading + not-found guards
+  if (loading) {
+    return <p className="p-10 text-center">Loading checkout...</p>;
+  }
+
+  if (!item || !item.id) {
     return <p className="p-10 text-center">Booking not found.</p>;
   }
 
@@ -133,7 +151,40 @@ export default function Checkout() {
   const roomCost = showRoom && chosenRoom ? chosenRoom.price : 0;
   const total = summary.basePrice + roomCost;
 
-  const handleConfirm = () => {
+  // POST the booking to the backend, then clear the saved checkout
+  const handleConfirm = async () => {
+    const user = JSON.parse(localStorage.getItem("user")) || {};
+
+    const booking = {
+      ref: `SKY-${Date.now().toString().slice(-4)}`,
+      user_email: user.email || "guest@skyora.com",
+      type: type,
+      item_id: Number(id),
+      customer: `${traveler.firstName} ${traveler.lastName}`.trim() || "Guest",
+      trip: summary.title,
+      seat: selectedSeat || null,
+      room: selectedRoom || null,
+      booking_date: (() => {
+        const d = new Date();
+        const year = d.getFullYear();
+        const month = String(d.getMonth() + 1).padStart(2, "0");
+        const day = String(d.getDate()).padStart(2, "0");
+        return `${year}-${month}-${day}`;
+      })(),
+      price: total,
+      status: "Confirmed",
+    };
+
+    try {
+      await fetch(`${API}/bookings`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(booking),
+      });
+    } catch (err) {
+      console.error("Booking failed", err);
+    }
+
     localStorage.removeItem(keyPrefix + "step");
     localStorage.removeItem(keyPrefix + "traveler");
     localStorage.removeItem(keyPrefix + "seat");

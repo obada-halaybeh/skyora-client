@@ -8,9 +8,9 @@ export default function HotelCard({
   location,
   stars,
   rating,
-  reviewCount,
+  review_count,
   price,
-  imgSeed,
+  img_seed,
   amenities,
 }) {
   return (
@@ -19,7 +19,7 @@ export default function HotelCard({
       className="bg-canvas border border-hairline rounded-2xl overflow-hidden cursor-pointer hover:shadow-card-hover transition-shadow"
     >
       <img
-        src={`https://picsum.photos/seed/${imgSeed}/400/220`}
+        src={`https://picsum.photos/seed/${img_seed}/400/220`}
         alt={name}
         className="w-full h-[180px] object-cover"
       />
@@ -38,11 +38,11 @@ export default function HotelCard({
         </p>
 
         {/* Review count */}
-        <p className="text-[12px] text-ash mb-3">{reviewCount} reviews</p>
+        <p className="text-[12px] text-ash mb-3">{review_count} reviews</p>
 
         {/* Amenities */}
         <div className="flex gap-1.5 flex-wrap mb-4">
-          {amenities.map((a) => (
+          {amenities.split(",").map((a) => (
             <span
               key={a}
               className="bg-cloud text-ash text-[11px] font-medium px-2 py-1 rounded-md"

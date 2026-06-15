@@ -1,18 +1,38 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import TopNav from "../components/layout/TopNav";
 import Footer from "../components/layout/Footer";
 import SearchPill from "../components/home/SearchPill";
 import FilterSidebar from "../components/common/FilterSidebar";
 import BundleCard from "../components/home/BundleCard";
-import { bundles } from "../data/bundles";
+import { API } from "../config";
 import { useSearchParams } from "react-router-dom";
 
 export default function Bundles() {
   const [maxPrice, setMaxPrice] = useState(2000);
   const [checks, setChecks] = useState({});
 
+  const [bundles, setBundles] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
   const [searchParams] = useSearchParams();
   const where = searchParams.get("where") || "";
+
+  useEffect(() => {
+    fetchBundles();
+  }, []);
+
+  const fetchBundles = async () => {
+    try {
+      const res = await fetch(`${API}/bundles`);
+      const data = await res.json();
+      setBundles(data);
+      setLoading(false);
+    } catch (err) {
+      setError("Failed to load bundles");
+      setLoading(false);
+    }
+  };
 
   const toggle = (label) => {
     setChecks({ ...checks, [label]: !checks[label] });
@@ -32,9 +52,10 @@ export default function Bundles() {
       checkedLengths.length === 0 ||
       checkedLengths.includes(bucketOf(b.nights));
     const okWhere =
-      where === "" || b.dest.toLowerCase().includes(where.toLowerCase());
+      where === "" || b.destination.toLowerCase().includes(where.toLowerCase());
     return okPrice && okLength && okWhere;
   });
+
   return (
     <div className="bg-canvas min-h-screen">
       <TopNav activeTab="Bundles" />
@@ -63,11 +84,17 @@ export default function Bundles() {
           </h2>
 
           {/* 2-column grid */}
-          <div className="grid grid-cols-2 gap-6">
-            {visibleBundles.map((b) => (
-              <BundleCard key={b.title} {...b} />
-            ))}
-          </div>
+          {loading ? (
+            <p className="text-ash py-10 text-center">Loading bundles...</p>
+          ) : error ? (
+            <p className="text-error py-10 text-center">{error}</p>
+          ) : (
+            <div className="grid grid-cols-2 gap-6">
+              {visibleBundles.map((b) => (
+                <BundleCard key={b.id} {...b} />
+              ))}
+            </div>
+          )}
         </div>
       </div>
 

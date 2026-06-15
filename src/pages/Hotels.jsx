@@ -1,18 +1,38 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import TopNav from "../components/layout/TopNav";
 import Footer from "../components/layout/Footer";
 import SearchPill from "../components/home/SearchPill";
 import FilterSidebar from "../components/common/FilterSidebar";
 import HotelCard from "../components/hotels/HotelCard";
-import { hotels } from "../data/hotels";
+import { API } from "../config";
 import { useSearchParams } from "react-router-dom";
 
 export default function Hotels() {
   const [maxPrice, setMaxPrice] = useState(2000);
   const [checks, setChecks] = useState({});
 
+  const [hotels, setHotels] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
   const [searchParams] = useSearchParams();
   const where = searchParams.get("where") || "";
+
+  useEffect(() => {
+    fetchHotels();
+  }, []);
+
+  const fetchHotels = async () => {
+    try {
+      const res = await fetch(`${API}/hotels`);
+      const data = await res.json();
+      setHotels(data);
+      setLoading(false);
+    } catch (err) {
+      setError("Failed to load hotels");
+      setLoading(false);
+    }
+  };
 
   const toggle = (label) => {
     setChecks({ ...checks, [label]: !checks[label] });
@@ -28,6 +48,7 @@ export default function Hotels() {
       where === "" || h.country.toLowerCase().includes(where.toLowerCase());
     return okPrice && okStars && okWhere;
   });
+
   return (
     <div className="bg-canvas min-h-screen">
       <TopNav activeTab="Hotels" />
@@ -54,11 +75,17 @@ export default function Hotels() {
           </div>
 
           {/* 3-column grid */}
-          <div className="grid grid-cols-3 gap-6">
-            {visibleHotels.map((h) => (
-              <HotelCard key={h.name} {...h} />
-            ))}
-          </div>
+          {loading ? (
+            <p className="text-ash py-10 text-center">Loading hotels...</p>
+          ) : error ? (
+            <p className="text-error py-10 text-center">{error}</p>
+          ) : (
+            <div className="grid grid-cols-3 gap-6">
+              {visibleHotels.map((h) => (
+                <HotelCard key={h.id} {...h} />
+              ))}
+            </div>
+          )}
         </div>
       </div>
 
