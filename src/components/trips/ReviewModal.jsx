@@ -26,8 +26,8 @@ export default function ReviewModal({ trip, onClose, onSubmit }) {
         {/* Header with trip image */}
         <div className="relative h-[120px]">
           <img
-            src={`https://picsum.photos/seed/${trip.imgSeed}/420/120`}
-            alt={trip.destination}
+            src={`https://picsum.photos/seed/${trip.type}${trip.item_id}/420/120`}
+            alt={trip.trip}
             className="w-full h-full object-cover"
           />
           <div className="absolute inset-0 bg-black/40" />
@@ -41,11 +41,9 @@ export default function ReviewModal({ trip, onClose, onSubmit }) {
             <p className="text-[11px] font-bold tracking-wide opacity-90">
               REVIEW YOUR TRIP
             </p>
-            <p className="text-lg font-extrabold leading-tight">
-              {trip.destination}
-            </p>
+            <p className="text-lg font-extrabold leading-tight">{trip.trip}</p>
             <p className="text-[11px] opacity-90">
-              {trip.dates} · {trip.id}
+              {trip.booking_date} · {trip.ref}
             </p>
           </div>
         </div>

@@ -4,14 +4,36 @@ import Footer from "../components/layout/Footer";
 import BookingPanel from "../components/common/BookingPanel";
 import ReviewsSection from "../components/common/ReviewsSection";
 import AirlineLogo from "../components/flights/AirlineLogo";
-import { bundles } from "../data/bundles";
+import { API } from "../config";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
 export default function BundleDetail() {
   const { id } = useParams();
-  const bundle = bundles.find((b) => b.id === Number(id));
 
-  if (!bundle) {
+  const [bundle, setBundle] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchBundle();
+  }, [id]);
+
+  const fetchBundle = async () => {
+    try {
+      const res = await fetch(`${API}/bundles/${id}`);
+      const data = await res.json();
+      setBundle(data);
+      setLoading(false);
+    } catch (err) {
+      setLoading(false);
+    }
+  };
+
+  if (loading) {
+    return <p className="p-10 text-center">Loading bundle...</p>;
+  }
+
+  if (!bundle || !bundle.id) {
     return <p className="p-10 text-center">Bundle not found.</p>;
   }
 
@@ -25,7 +47,7 @@ export default function BundleDetail() {
         {/* Header */}
         <div className="mb-8">
           <p className="text-[13px] text-ash font-medium mb-2">
-            {bundle.dest} · {bundle.nights} nights · {bundle.travelers}
+            {bundle.destination} · {bundle.nights} nights · {bundle.travelers}
           </p>
           <h1 className="text-4xl font-extrabold mb-3">{bundle.title}</h1>
           <div className="flex gap-3">
@@ -52,7 +74,7 @@ export default function BundleDetail() {
                   <AirlineLogo name={bundle.airline} />
                   <div>
                     <p className="text-sm font-bold">
-                      {bundle.airline} · {bundle.flightNo}
+                      {bundle.airline} · {bundle.flight_no}
                     </p>
                     <p className="text-xs text-ash">Economy</p>
                   </div>
@@ -60,7 +82,7 @@ export default function BundleDetail() {
                 <div className="flex justify-between items-center">
                   <div>
                     <p className="text-2xl font-extrabold">{bundle.depart}</p>
-                    <p className="text-xs text-ash">{bundle.from}</p>
+                    <p className="text-xs text-ash">{bundle.origin}</p>
                   </div>
                   <div className="text-center">
                     <p className="text-[11px] text-ash">{bundle.duration}</p>
@@ -69,7 +91,7 @@ export default function BundleDetail() {
                   </div>
                   <div className="text-right">
                     <p className="text-2xl font-extrabold">{bundle.arrive}</p>
-                    <p className="text-xs text-ash">{bundle.to}</p>
+                    <p className="text-xs text-ash">{bundle.dest_code}</p>
                   </div>
                 </div>
               </div>
@@ -77,21 +99,21 @@ export default function BundleDetail() {
               {/* Hotel card */}
               <div className="border border-hairline rounded-2xl overflow-hidden">
                 <img
-                  src={`https://picsum.photos/seed/${bundle.imgSeed}/400/120`}
-                  alt={bundle.hotelName}
+                  src={`https://picsum.photos/seed/${bundle.img_seed}/400/120`}
+                  alt={bundle.hotel_name}
                   className="w-full h-[100px] object-cover"
                 />
                 <div className="p-4">
                   <p className="text-[11px] font-bold text-ash mb-2 tracking-wide">
                     ACCOMMODATION
                   </p>
-                  <p className="text-base font-bold">{bundle.hotelName}</p>
+                  <p className="text-base font-bold">{bundle.hotel_name}</p>
                   <p className="text-xs text-ash mt-0.5">
-                    {bundle.nights} nights · {bundle.roomType}
+                    {bundle.nights} nights · {bundle.room_type}
                   </p>
                   <p className="text-xs text-amber mt-1">
-                    {"★".repeat(5)} · {bundle.hotelRating} (
-                    {bundle.hotelReviews.toLocaleString()} reviews)
+                    {"★".repeat(5)} · {bundle.hotel_rating} (
+                    {bundle.hotel_reviews.toLocaleString()} reviews)
                   </p>
                 </div>
               </div>

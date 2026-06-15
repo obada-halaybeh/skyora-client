@@ -1,16 +1,61 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import TopNav from "../components/layout/TopNav";
 import Footer from "../components/layout/Footer";
 import TripCard from "../components/trips/TripCard";
 import ReviewModal from "../components/trips/ReviewModal";
-import { trips as initialTrips } from "../data/trips";
+import { API } from "../config";
 
 export default function Trips() {
   const [tab, setTab] = useState("upcoming");
-  const [reviewing, setReviewing] = useState(null); // which trip's modal is open
-  const [reviewed, setReviewed] = useState({}); // submitted reviews by trip id
+  const [reviewing, setReviewing] = useState(null);
+  const [reviewed, setReviewed] = useState({});
 
-  const [tripData, setTripData] = useState(initialTrips);
+  // Bookings grouped into the three tabs
+  const [tripData, setTripData] = useState({
+    upcoming: [],
+    past: [],
+    cancelled: [],
+  });
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchTrips();
+  }, []);
+
+  const fetchTrips = async () => {
+    try {
+      const user = JSON.parse(localStorage.getItem("user")) || {};
+      const res = await fetch(`${API}/bookings`);
+      const all = await res.json();
+
+      // Only this user's bookings
+      const mine = all.filter((b) => b.user_email === user.email);
+
+      // Group into upcoming / past / cancelled
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const grouped = { upcoming: [], past: [], cancelled: [] };
+
+      mine.forEach((b) => {
+        if (b.status === "Cancelled") {
+          grouped.cancelled.push(b);
+        } else {
+          // Confirmed: future date = upcoming, past date = past
+          const tripDate = new Date(b.booking_date);
+          if (tripDate >= today) {
+            grouped.upcoming.push(b);
+          } else {
+            grouped.past.push(b);
+          }
+        }
+      });
+
+      setTripData(grouped);
+      setLoading(false);
+    } catch (err) {
+      setLoading(false);
+    }
+  };
 
   const tabs = [
     {
@@ -22,19 +67,43 @@ export default function Trips() {
     { id: "cancelled", label: "Cancelled", count: tripData.cancelled.length },
   ];
 
-  const handleSubmitReview = (data) => {
+  // Submit a review to the backend, then mark this trip reviewed
+  const handleSubmitReview = async (data) => {
+    const review = {
+      type: reviewing.type,
+      item_id: reviewing.item_id,
+      name: reviewing.customer,
+      rating: data.rating,
+      text: data.text,
+      review_date: new Date().toLocaleDateString(),
+    };
+
+    try {
+      await fetch(`${API}/reviews`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(review),
+      });
+    } catch (err) {
+      console.error("Review failed", err);
+    }
+
     setReviewed({ ...reviewed, [reviewing.id]: data });
     setReviewing(null);
   };
-  const handleCancel = (trip) => {
-    setTripData((prev) => ({
-      ...prev,
-      upcoming: prev.upcoming.filter((t) => t.id !== trip.id),
-      cancelled: [
-        { ...trip, status: "Cancelled", refunded: true },
-        ...prev.cancelled,
-      ],
-    }));
+
+  // Cancel a trip — updates the database, then refreshes
+  const handleCancel = async (trip) => {
+    try {
+      await fetch(`${API}/bookings/${trip.id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status: "Cancelled" }),
+      });
+    } catch (err) {
+      console.error("Cancel failed", err);
+    }
+    fetchTrips(); // reload from the backend
   };
 
   return (
@@ -83,21 +152,27 @@ export default function Trips() {
         </div>
 
         {/* Trip list */}
-        <div>
-          {tripData[tab].map((trip) => (
-            <TripCard
-              key={trip.id}
-              trip={trip}
-              tab={tab}
-              onReview={setReviewing}
-              onCancel={handleCancel}
-              reviewed={reviewed[trip.id]}
-            />
-          ))}
-        </div>
+        {loading ? (
+          <p className="text-ash py-10 text-center">Loading your trips...</p>
+        ) : tripData[tab].length === 0 ? (
+          <p className="text-ash py-10 text-center">No trips here yet.</p>
+        ) : (
+          <div>
+            {tripData[tab].map((trip) => (
+              <TripCard
+                key={trip.id}
+                trip={trip}
+                tab={tab}
+                onReview={setReviewing}
+                onCancel={handleCancel}
+                reviewed={reviewed[trip.id]}
+              />
+            ))}
+          </div>
+        )}
       </div>
 
-      {/* Review modal — only renders when a trip is selected */}
+      {/* Review modal */}
       {reviewing && (
         <ReviewModal
           trip={reviewing}

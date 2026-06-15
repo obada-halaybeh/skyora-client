@@ -1,24 +1,46 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
+import { API } from "../config";
 import TopNav from "../components/layout/TopNav";
 import Footer from "../components/layout/Footer";
-import SearchPill from "../components/home/SearchPill";
 import FilterSidebar from "../components/common/FilterSidebar";
 import FlightCard from "../components/flights/FlightCard";
-import { flights } from "../data/flights";
 
 export default function Flights() {
-  // Read ?where= from the URL (set by the search pill)
   const [searchParams] = useSearchParams();
   const where = searchParams.get("where") || "";
 
+  // Data from the backend
+  const [flights, setFlights] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  // Filters
   const [maxPrice, setMaxPrice] = useState(2000);
   const [checks, setChecks] = useState({});
+
+  // Load flights from the API on mount
+  useEffect(() => {
+    fetchFlights();
+  }, []);
+
+  const fetchFlights = async () => {
+    try {
+      const res = await fetch(`${API}/flights`);
+      const data = await res.json();
+      setFlights(data);
+      setLoading(false);
+    } catch (err) {
+      setError("Failed to load flights");
+      setLoading(false);
+    }
+  };
 
   const toggle = (label) => {
     setChecks({ ...checks, [label]: !checks[label] });
   };
 
+  const sortOptions = ["Cheapest", "Fastest", "Best"];
   const checkedAirlines = Object.keys(checks).filter((label) => checks[label]);
 
   const visibleFlights = flights.filter((f) => {
@@ -34,7 +56,6 @@ export default function Flights() {
     <div className="bg-canvas min-h-screen">
       <TopNav activeTab="Flights" />
 
-      {/* Main layout */}
       <div className="flex gap-8 px-8 py-8 max-w-[1200px] mx-auto">
         <FilterSidebar
           maxPrice={maxPrice}
@@ -44,15 +65,14 @@ export default function Flights() {
           groupTitle="Airlines"
           options={[
             "Emirates",
-            "Lufthansa",
             "British Airways",
+            "Lufthansa",
             "Singapore Airlines",
             "Qatar Airways",
           ]}
         />
 
         <div className="flex-1">
-          {/* Results heading */}
           <h2 className="text-lg font-bold mb-5">
             {where ? `Results for "${where}"` : "All Flights"}{" "}
             <span className="text-sm text-ash font-medium">
@@ -60,12 +80,16 @@ export default function Flights() {
             </span>
           </h2>
 
-          {/* Flight cards */}
-          {visibleFlights.length > 0 ? (
+          {/* Loading / error / data states */}
+          {loading ? (
+            <p className="text-ash py-10 text-center">Loading flights...</p>
+          ) : error ? (
+            <p className="text-error py-10 text-center">{error}</p>
+          ) : visibleFlights.length > 0 ? (
             visibleFlights.map((f) => <FlightCard key={f.id} {...f} />)
           ) : (
-            <p className="text-ash font-medium py-10 text-center">
-              No flights found for "{where}". Try a different destination.
+            <p className="text-ash py-10 text-center">
+              No flights found{where && ` for "${where}"`}.
             </p>
           )}
         </div>

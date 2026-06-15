@@ -3,15 +3,33 @@ import Footer from "../components/layout/Footer";
 import BookingPanel from "../components/common/BookingPanel";
 import SeatMap from "../components/flights/SeatMap";
 import { useParams } from "react-router-dom";
-import { flights } from "../data/flights";
+import { API } from "../config";
 import ReviewsSection from "../components/common/ReviewsSection";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
 export default function FlightDetail() {
   const { id } = useParams();
-  const flight = flights.find((f) => f.id === Number(id));
+
+  const [flight, setFlight] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [selectedSeat, setSelectedSeat] = useState(null);
+
+  // Load this flight from the backend
+  useEffect(() => {
+    fetchFlight();
+  }, [id]);
+
+  const fetchFlight = async () => {
+    try {
+      const res = await fetch(`${API}/flights/${id}`);
+      const data = await res.json();
+      setFlight(data);
+      setLoading(false);
+    } catch (err) {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     if (selectedSeat) {
@@ -19,16 +37,19 @@ export default function FlightDetail() {
     }
   }, [selectedSeat]);
 
-  if (!flight) {
+  if (loading) {
+    return <p className="p-10 text-center">Loading flight...</p>;
+  }
+
+  if (!flight || !flight.id) {
     return <p className="p-10 text-center">Flight not found.</p>;
   }
+
   const baggage = [
     { icon: "👜", title: "Hand Luggage", desc: "1 piece, 7kg, cabin" },
     { icon: "🧳", title: "Checked Bag", desc: "1 piece, 23kg included" },
     { icon: "🎒", title: "Personal Item", desc: "1 small bag, free" },
   ];
-
-  const tags = ["May 15, 2026", "Boeing 777-300ER", "Fully Refundable"];
 
   return (
     <div className="bg-canvas min-h-screen">
@@ -41,14 +62,14 @@ export default function FlightDetail() {
             {/* Route header */}
             <div className="mb-8">
               <p className="text-[13px] text-ash font-medium mb-2">
-                {flight.airline} · Economy · {flight.flightNo}
+                {flight.airline} · Economy · {flight.flight_no}
               </p>
               <div className="flex items-center gap-6 mb-4">
                 {/* Departure */}
                 <div>
                   <p className="text-5xl font-extrabold">{flight.depart}</p>
-                  <p className="text-base font-bold mt-1">{flight.fromCity}</p>
-                  <p className="text-sm text-ash">{flight.fromTerminal}</p>
+                  <p className="text-base font-bold mt-1">{flight.from_city}</p>
+                  <p className="text-sm text-ash">{flight.from_terminal}</p>
                 </div>
 
                 {/* Middle */}
@@ -72,14 +93,14 @@ export default function FlightDetail() {
                 {/* Arrival */}
                 <div className="text-right">
                   <p className="text-5xl font-extrabold">{flight.arrive}</p>
-                  <p className="text-base font-bold mt-1">{flight.toCity}</p>
-                  <p className="text-sm text-ash">{flight.toTerminal}</p>
+                  <p className="text-base font-bold mt-1">{flight.to_city}</p>
+                  <p className="text-sm text-ash">{flight.to_terminal}</p>
                 </div>
               </div>
 
               {/* Tags */}
               <div className="flex gap-3">
-                {[flight.date, flight.aircraft].map((t) => (
+                {[flight.flight_date, flight.aircraft].map((t) => (
                   <span
                     key={t}
                     className="bg-cloud text-ash text-[13px] font-medium px-3 py-1.5 rounded-lg"

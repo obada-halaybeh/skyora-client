@@ -5,13 +5,13 @@ import { Link } from "react-router-dom";
 export default function BundleCard({
   id,
   title,
-  dest,
-  flight,
-  hotel,
+  destination,
+  flight_label,
+  hotel_name,
   nights,
   price,
   original,
-  imgSeed,
+  img_seed,
 }) {
   const savings = Math.round((1 - price / original) * 100);
   return (
@@ -21,7 +21,7 @@ export default function BundleCard({
     >
       <div className="relative">
         <img
-          src={`https://picsum.photos/seed/${imgSeed}/600/250`}
+          src={`https://picsum.photos/seed/${img_seed}/600/250`}
           alt={title}
           className="w-full h-[180px] object-cover"
         />
@@ -32,17 +32,17 @@ export default function BundleCard({
       <div className="p-5">
         <h3 className="text-lg font-bold mb-1">{title}</h3>
         <p className="text-sm font-medium text-ash mb-3">
-          {dest} . {nights} night
+          {destination} . {nights} night
         </p>
 
         <div className="flex gap-3 mb-4">
           <div className="flex-1 bg-cloud rounded-[10px] px-3.5 py-2.5">
             <p className="text-[11px] font-bold text-ash mb-1">FLIGHT</p>
-            <p className="text-[13px] font-semibold">{flight}</p>
+            <p className="text-[13px] font-semibold">{flight_label}</p>
           </div>
           <div className="flex-1 bg-cloud rounded-[10px] px-3.5 py-2.5">
             <p className="text-[11px] font-bold text-ash mb-1">HOTEL</p>
-            <p className="text-[13px] font-semibold">{hotel}</p>
+            <p className="text-[13px] font-semibold">{hotel_name}</p>
           </div>
         </div>
         <div className="flex justify-between items-center">

@@ -4,22 +4,42 @@ import Footer from "../components/layout/Footer";
 import BookingPanel from "../components/common/BookingPanel";
 import Stars from "../components/hotels/Stars";
 import Button from "../components/common/Button";
-import { hotels } from "../data/hotels";
+import { API } from "../config";
 import ReviewsSection from "../components/common/ReviewsSection";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
 export default function HotelDetail() {
   const { id } = useParams();
-  const hotel = hotels.find((h) => h.id === Number(id));
 
+  const [hotel, setHotel] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [selectedRoom, setSelectedRoom] = useState(null);
+
+  useEffect(() => {
+    fetchHotel();
+  }, [id]);
+
+  const fetchHotel = async () => {
+    try {
+      const res = await fetch(`${API}/hotels/${id}`);
+      const data = await res.json();
+      setHotel(data);
+      setLoading(false);
+    } catch (err) {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     if (selectedRoom) localStorage.setItem("skyora_room", selectedRoom);
   }, [selectedRoom]);
 
-  if (!hotel) {
+  if (loading) {
+    return <p className="p-10 text-center">Loading hotel...</p>;
+  }
+
+  if (!hotel || !hotel.id) {
     return <p className="p-10 text-center">Hotel not found.</p>;
   }
 
@@ -55,7 +75,7 @@ export default function HotelDetail() {
               <h1 className="text-3xl font-extrabold mb-2">{hotel.name}</h1>
               <div className="flex items-center gap-3 flex-wrap text-sm text-ash font-medium">
                 <Stars rating={hotel.rating} />
-                <span>{hotel.reviewCount.toLocaleString()} reviews</span>
+                <span>{hotel.review_count.toLocaleString()} reviews</span>
                 <span>·</span>
                 <span>{hotel.location}</span>
                 <span>·</span>
@@ -110,7 +130,7 @@ export default function HotelDetail() {
                       }`}
                     >
                       <img
-                        src={`https://picsum.photos/seed/${room.imgSeed}/300/180`}
+                        src={`https://picsum.photos/seed/${room.img_seed}/300/180`}
                         alt={room.type}
                         className="w-[220px] h-[150px] object-cover shrink-0"
                       />

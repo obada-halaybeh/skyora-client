@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import SkyoraWordmark from "../components/auth/SkyoraWordmark";
 import Input from "../components/common/Input";
 import Button from "../components/common/Button";
-import { login } from "../services/authService";
+import { API } from "../config";
 
 export default function Auth() {
   const navigate = useNavigate();
@@ -25,7 +25,24 @@ export default function Auth() {
     setError("");
     setLoading(true);
     try {
-      const user = await login(signinData.email, signinData.password);
+      const res = await fetch(`${API}/auth/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(signinData),
+      });
+
+      if (!res.ok) {
+        // backend returned 401 etc.
+        throw new Error("Invalid email or password");
+      }
+
+      const data = await res.json();
+      const user = data.user;
+
+      // Save the user so other pages know who's logged in (and their role)
+      localStorage.setItem("user", JSON.stringify(user));
+
+      // Redirect based on role
       if (user.role === "admin") {
         navigate("/admin/flights");
       } else {
