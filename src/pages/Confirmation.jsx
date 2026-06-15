@@ -1,66 +1,76 @@
 import { useParams, Link } from "react-router-dom";
+import { useState, useEffect } from "react";
 import TopNav from "../components/layout/TopNav";
 import Footer from "../components/layout/Footer";
 import Button from "../components/common/Button";
-import { flights } from "../data/flights";
-import { hotels } from "../data/hotels";
-import { bundles } from "../data/bundles";
+import { API } from "../config";
 
 export default function Confirmation() {
   const { type, id } = useParams();
 
-  // Build a simple summary based on the booking type
-  let summary = null;
+  const [item, setItem] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  if (type === "flight") {
-    const f = flights.find((x) => x.id === Number(id));
-    if (f) {
-      summary = {
-        title: `${f.airline} · ${f.flightNo}`,
-        rows: [
-          ["Route", `${f.fromCity} → ${f.toCity}`],
-          ["Departure", `${f.depart} · ${f.date}`],
-          ["Arrival", f.arrive],
-          ["Duration", f.duration],
-        ],
-        price: f.price,
-        imgSeed: 542,
-      };
+  useEffect(() => {
+    fetchItem();
+  }, [type, id]);
+
+  const fetchItem = async () => {
+    try {
+      const res = await fetch(`${API}/${type}s/${id}`);
+      const data = await res.json();
+      setItem(data);
+      setLoading(false);
+    } catch (err) {
+      setLoading(false);
     }
-  } else if (type === "hotel") {
-    const h = hotels.find((x) => x.id === Number(id));
-    if (h) {
-      summary = {
-        title: h.name,
-        rows: [
-          ["Location", h.location],
-          ["Rating", `${h.rating} (${h.stars}-star)`],
-          ["Stay", `${h.nights || ""} nights`.trim() || "—"],
-        ],
-        price: h.price,
-        imgSeed: h.imgSeed,
-      };
-    }
-  } else if (type === "bundle") {
-    const b = bundles.find((x) => x.id === Number(id));
-    if (b) {
-      summary = {
-        title: b.title,
-        rows: [
-          ["Destination", b.dest],
-          ["Flight", `${b.airline} · ${b.flightNo}`],
-          ["Hotel", b.hotelName],
-          ["Nights", `${b.nights} nights`],
-          ["Travelers", b.travelers],
-        ],
-        price: b.price,
-        imgSeed: b.imgSeed,
-      };
-    }
+  };
+
+  if (loading) {
+    return <p className="p-10 text-center">Loading confirmation...</p>;
   }
 
-  if (!summary) {
+  if (!item || !item.id) {
     return <p className="p-10 text-center">Booking not found.</p>;
+  }
+
+  // Build a simple summary based on type
+  let summary = null;
+  if (type === "flight") {
+    summary = {
+      title: `${item.airline} · ${item.flight_no}`,
+      rows: [
+        ["Route", `${item.origin} → ${item.destination}`],
+        ["Departure", item.depart],
+        ["Arrival", item.arrive],
+        ["Duration", item.duration],
+      ],
+      price: item.price,
+      imgSeed: 542,
+    };
+  } else if (type === "hotel") {
+    summary = {
+      title: item.name,
+      rows: [
+        ["Location", item.location],
+        ["Rating", `${item.rating} (${item.stars}-star)`],
+      ],
+      price: item.price,
+      imgSeed: item.img_seed,
+    };
+  } else if (type === "bundle") {
+    summary = {
+      title: item.title,
+      rows: [
+        ["Destination", item.destination],
+        ["Flight", `${item.airline} · ${item.flight_no}`],
+        ["Hotel", item.hotel_name],
+        ["Nights", `${item.nights} nights`],
+        ["Travelers", item.travelers],
+      ],
+      price: item.price,
+      imgSeed: item.img_seed,
+    };
   }
 
   return (

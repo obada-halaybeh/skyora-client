@@ -4,13 +4,29 @@ import TopNav from "../components/layout/TopNav";
 import SearchPill from "../components/home/SearchPill";
 import BundleCard from "../components/home/BundleCard";
 import Footer from "../components/layout/Footer";
-import { bundles } from "../data/bundles";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { API } from "../config";
 
 export default function Home() {
   const [searchType, setSearchType] = useState("flights");
   const [where, setWhere] = useState("");
   const [dates, setDates] = useState("");
+
+  const [bundles, setBundles] = useState([]);
+
+  useEffect(() => {
+    fetchBundles();
+  }, []);
+
+  const fetchBundles = async () => {
+    try {
+      const res = await fetch(`${API}/bundles`);
+      const data = await res.json();
+      setBundles(data);
+    } catch (err) {
+      console.error("Failed to load bundles", err);
+    }
+  };
 
   const destinations = [
     { city: "Dubai", country: "UAE", price: 420, seed: 159 },
@@ -115,9 +131,12 @@ export default function Home() {
             Flight + hotel, better together
           </p>
           <div className="grid grid-cols-3 gap-6">
-            {bundles.slice(0, 3).map((b) => (
-              <BundleCard key={b.id} {...b} />
-            ))}
+            {bundles
+              .filter((b) => b.status === "Active")
+              .slice(0, 3)
+              .map((b) => (
+                <BundleCard key={b.id} {...b} />
+              ))}
           </div>
         </section>
 

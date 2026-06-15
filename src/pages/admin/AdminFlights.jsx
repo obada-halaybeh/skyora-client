@@ -4,18 +4,19 @@ import DataTable from "../../components/admin/DataTable";
 import Drawer from "../../components/admin/Drawer";
 import Button from "../../components/common/Button";
 import Input from "../../components/common/Input";
-import {
-  getFlights,
-  addFlight,
-  updateFlight,
-  deleteFlight,
-} from "../../services/flightService";
+import { API } from "../../config";
 
 const EMPTY_FORM = {
-  flightNo: "",
   airline: "",
-  route: "",
-  schedule: "",
+  flight_no: "",
+  origin: "",
+  destination: "",
+  country: "",
+  depart: "",
+  arrive: "",
+  duration: "",
+  stops: "",
+  direct: false,
   seats: "",
   price: "",
   status: "Active",
@@ -27,36 +28,42 @@ export default function AdminFlights() {
   const [search, setSearch] = useState("");
 
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const [editingId, setEditingId] = useState(null); // null = adding, an id = editing
+  const [editingId, setEditingId] = useState(null);
   const [form, setForm] = useState(EMPTY_FORM);
 
-  // Load flights from the service when the page mounts
+  const user = JSON.parse(localStorage.getItem("user")) || {};
+
   useEffect(() => {
     loadFlights();
   }, []);
 
   const loadFlights = async () => {
     setLoading(true);
-    const data = await getFlights();
+    const res = await fetch(`${API}/flights`);
+    const data = await res.json();
     setFlights(data);
     setLoading(false);
   };
 
-  // ── Open drawer for adding ──
   const openAdd = () => {
     setEditingId(null);
     setForm(EMPTY_FORM);
     setDrawerOpen(true);
   };
 
-  // ── Open drawer for editing (pre-fill the form) ──
   const openEdit = (flight) => {
     setEditingId(flight.id);
     setForm({
-      flightNo: flight.flightNo,
       airline: flight.airline,
-      route: flight.route,
-      schedule: flight.schedule,
+      flight_no: flight.flight_no,
+      origin: flight.origin,
+      destination: flight.destination,
+      country: flight.country,
+      depart: flight.depart,
+      arrive: flight.arrive,
+      duration: flight.duration,
+      stops: flight.stops,
+      direct: flight.direct,
       seats: flight.seats,
       price: flight.price,
       status: flight.status,
@@ -64,38 +71,54 @@ export default function AdminFlights() {
     setDrawerOpen(true);
   };
 
-  // ── Save (add or update depending on editingId) ──
   const handleSave = async () => {
     const payload = {
       ...form,
       seats: Number(form.seats),
       price: Number(form.price),
     };
+
     if (editingId) {
-      await updateFlight(editingId, payload);
+      await fetch(`${API}/flights/${editingId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          "x-role": user.role,
+        },
+        body: JSON.stringify(payload),
+      });
     } else {
-      await addFlight(payload);
+      await fetch(`${API}/flights`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-role": user.role,
+        },
+        body: JSON.stringify(payload),
+      });
     }
+
     setDrawerOpen(false);
-    loadFlights(); // refresh the table from the service
+    loadFlights();
   };
 
-  // ── Delete ──
   const handleDelete = async (flight) => {
-    if (!confirm(`Delete flight ${flight.flightNo}?`)) return;
-    await deleteFlight(flight.id);
+    if (!confirm(`Delete flight ${flight.flight_no}?`)) return;
+    await fetch(`${API}/flights/${flight.id}`, {
+      method: "DELETE",
+      headers: { "x-role": user.role },
+    });
     loadFlights();
   };
 
   const setField = (field, value) => setForm({ ...form, [field]: value });
 
-  // Client-side search filter
   const visible = flights.filter((f) => {
     const q = search.toLowerCase();
     return (
-      f.flightNo.toLowerCase().includes(q) ||
+      f.flight_no.toLowerCase().includes(q) ||
       f.airline.toLowerCase().includes(q) ||
-      f.route.toLowerCase().includes(q)
+      `${f.origin} ${f.destination}`.toLowerCase().includes(q)
     );
   });
 
@@ -128,7 +151,6 @@ export default function AdminFlights() {
             "Flight No.",
             "Airline",
             "Route",
-            "Schedule",
             "Seats",
             "Price",
             "Status",
@@ -138,10 +160,11 @@ export default function AdminFlights() {
           onDelete={handleDelete}
           renderCell={(f) => (
             <>
-              <td className="px-5 py-3 font-bold font-mono">{f.flightNo}</td>
+              <td className="px-5 py-3 font-bold font-mono">{f.flight_no}</td>
               <td className="px-5 py-3">{f.airline}</td>
-              <td className="px-5 py-3">{f.route}</td>
-              <td className="px-5 py-3 text-ash">{f.schedule}</td>
+              <td className="px-5 py-3">
+                {f.origin} → {f.destination}
+              </td>
               <td className="px-5 py-3">{f.seats}</td>
               <td className="px-5 py-3 font-semibold">${f.price}</td>
               <td className="px-5 py-3">
@@ -176,21 +199,70 @@ export default function AdminFlights() {
           <Input
             label="FLIGHT NUMBER"
             placeholder="EK002"
-            value={form.flightNo}
-            onChange={(e) => setField("flightNo", e.target.value)}
+            value={form.flight_no}
+            onChange={(e) => setField("flight_no", e.target.value)}
           />
+          <div className="grid grid-cols-2 gap-4">
+            <Input
+              label="ORIGIN"
+              placeholder="LHR"
+              value={form.origin}
+              onChange={(e) => setField("origin", e.target.value)}
+            />
+            <Input
+              label="DESTINATION"
+              placeholder="DXB"
+              value={form.destination}
+              onChange={(e) => setField("destination", e.target.value)}
+            />
+          </div>
           <Input
-            label="ROUTE"
-            placeholder="LHR → DXB"
-            value={form.route}
-            onChange={(e) => setField("route", e.target.value)}
+            label="COUNTRY"
+            placeholder="UAE"
+            value={form.country}
+            onChange={(e) => setField("country", e.target.value)}
           />
-          <Input
-            label="SCHEDULE"
-            placeholder="Daily 08:15"
-            value={form.schedule}
-            onChange={(e) => setField("schedule", e.target.value)}
-          />
+          <div className="grid grid-cols-2 gap-4">
+            <Input
+              label="DEPART TIME"
+              placeholder="08:15"
+              value={form.depart}
+              onChange={(e) => setField("depart", e.target.value)}
+            />
+            <Input
+              label="ARRIVE TIME"
+              placeholder="18:35"
+              value={form.arrive}
+              onChange={(e) => setField("arrive", e.target.value)}
+            />
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <Input
+              label="DURATION"
+              placeholder="7h 20m"
+              value={form.duration}
+              onChange={(e) => setField("duration", e.target.value)}
+            />
+            <Input
+              label="STOPS"
+              placeholder="Non-stop / 1 stop"
+              value={form.stops}
+              onChange={(e) => setField("stops", e.target.value)}
+            />
+          </div>
+          <div>
+            <label className="block text-[12px] font-bold mb-1.5 tracking-wide">
+              DIRECT FLIGHT?
+            </label>
+            <select
+              value={form.direct ? "yes" : "no"}
+              onChange={(e) => setField("direct", e.target.value === "yes")}
+              className="w-full px-4 py-[13px] border border-hairline rounded-[10px] text-[15px] font-medium outline-none focus:border-ink"
+            >
+              <option value="no">No (has stops)</option>
+              <option value="yes">Yes (direct)</option>
+            </select>
+          </div>
           <div className="grid grid-cols-2 gap-4">
             <Input
               label="SEATS"

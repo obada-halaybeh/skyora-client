@@ -41,12 +41,13 @@ export default function Hotels() {
   const checkedStars = Object.keys(checks).filter((label) => checks[label]);
 
   const visibleHotels = hotels.filter((h) => {
+    const okStatus = h.status === "Active";
     const okPrice = h.price <= maxPrice;
     const okStars =
       checkedStars.length === 0 || checkedStars.includes(`${h.stars} stars`);
     const okWhere =
       where === "" || h.country.toLowerCase().includes(where.toLowerCase());
-    return okPrice && okStars && okWhere;
+    return okStatus && okPrice && okStars && okWhere;
   });
 
   return (

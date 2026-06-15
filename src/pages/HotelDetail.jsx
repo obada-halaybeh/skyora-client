@@ -100,19 +100,15 @@ export default function HotelDetail() {
             <div className="border-b border-hairline pb-8 mb-8">
               <h2 className="text-xl font-bold mb-5">What this place offers</h2>
               <div className="grid grid-cols-2 gap-3">
-                {hotel.offers.map((offer) => {
-                  const emoji = offer.split(" ")[0];
-                  const text = offer.split(" ").slice(1).join(" ");
-                  return (
-                    <div
-                      key={offer}
-                      className="flex items-center gap-3 text-[15px] font-medium"
-                    >
-                      <span className="text-xl">{emoji}</span>
-                      <span>{text}</span>
-                    </div>
-                  );
-                })}
+                {hotel.offers.map((offer) => (
+                  <div
+                    key={offer}
+                    className="flex items-center gap-3 text-[15px] font-medium"
+                  >
+                    <span className="text-success">✓</span>
+                    <span>{offer}</span>
+                  </div>
+                ))}
               </div>
             </div>
 
