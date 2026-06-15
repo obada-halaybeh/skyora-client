@@ -47,13 +47,14 @@ export default function Bundles() {
   };
 
   const visibleBundles = bundles.filter((b) => {
+    const okStatus = b.status === "Active";
     const okPrice = b.price <= maxPrice;
     const okLength =
       checkedLengths.length === 0 ||
       checkedLengths.includes(bucketOf(b.nights));
     const okWhere =
       where === "" || b.destination.toLowerCase().includes(where.toLowerCase());
-    return okPrice && okLength && okWhere;
+    return okStatus && okPrice && okLength && okWhere;
   });
 
   return (

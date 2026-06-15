@@ -4,26 +4,35 @@ import DataTable from "../../components/admin/DataTable";
 import Drawer from "../../components/admin/Drawer";
 import Button from "../../components/common/Button";
 import Input from "../../components/common/Input";
-import {
-  getBundles,
-  addBundle,
-  updateBundle,
-  deleteBundle,
-} from "../../services/bundleService";
+import { API } from "../../config";
 
 const EMPTY_FORM = {
   title: "",
   destination: "",
-  flight: "",
-  hotel: "",
+  travelers: "2 adults",
+  airline: "",
+  flight_no: "",
+  flight_label: "",
+  origin: "",
+  dest_code: "",
+  depart: "",
+  arrive: "",
+  duration: "",
+  hotel_id: "",
+  hotel_name: "",
+  hotel_rating: "",
+  hotel_reviews: "",
+  room_type: "",
   nights: "",
   price: "",
   original: "",
+  img_seed: "",
   status: "Active",
 };
 
 export default function AdminBundles() {
   const [bundles, setBundles] = useState([]);
+  const [hotelOptions, setHotelOptions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
 
@@ -31,15 +40,25 @@ export default function AdminBundles() {
   const [editingId, setEditingId] = useState(null);
   const [form, setForm] = useState(EMPTY_FORM);
 
+  const user = JSON.parse(localStorage.getItem("user")) || {};
+
   useEffect(() => {
     loadBundles();
+    loadHotels();
   }, []);
 
   const loadBundles = async () => {
     setLoading(true);
-    const data = await getBundles();
+    const res = await fetch(`${API}/bundles`);
+    const data = await res.json();
     setBundles(data);
     setLoading(false);
+  };
+
+  const loadHotels = async () => {
+    const res = await fetch(`${API}/hotels`);
+    const data = await res.json();
+    setHotelOptions(data);
   };
 
   const openAdd = () => {
@@ -53,35 +72,79 @@ export default function AdminBundles() {
     setForm({
       title: bundle.title,
       destination: bundle.destination,
-      flight: bundle.flight,
-      hotel: bundle.hotel,
+      travelers: bundle.travelers || "2 adults",
+      airline: bundle.airline,
+      flight_no: bundle.flight_no,
+      flight_label: bundle.flight_label,
+      origin: bundle.origin,
+      dest_code: bundle.dest_code,
+      depart: bundle.depart,
+      arrive: bundle.arrive,
+      duration: bundle.duration,
+      hotel_id: bundle.hotel_id,
+      hotel_name: bundle.hotel_name,
+      hotel_rating: bundle.hotel_rating,
+      hotel_reviews: bundle.hotel_reviews,
+      room_type: bundle.room_type,
       nights: bundle.nights,
       price: bundle.price,
       original: bundle.original,
+      img_seed: bundle.img_seed,
       status: bundle.status,
     });
     setDrawerOpen(true);
   };
 
+  // When a hotel is picked, fill hotel_name/rating/reviews from it
+  const pickHotel = (hotelId) => {
+    const h = hotelOptions.find((x) => x.id === Number(hotelId));
+    setForm({
+      ...form,
+      hotel_id: hotelId,
+      hotel_name: h ? h.name : "",
+      hotel_rating: h ? h.rating : "",
+      hotel_reviews: h ? h.review_count : "",
+    });
+  };
+
   const handleSave = async () => {
     const payload = {
       ...form,
+      hotel_id: Number(form.hotel_id),
+      hotel_rating: Number(form.hotel_rating),
+      hotel_reviews: Number(form.hotel_reviews),
       nights: Number(form.nights),
       price: Number(form.price),
       original: Number(form.original),
+      img_seed: Number(form.img_seed),
+      // flight_label auto-built from airline if empty
+      flight_label: form.flight_label || `${form.airline} · Direct`,
     };
+
     if (editingId) {
-      await updateBundle(editingId, payload);
+      await fetch(`${API}/bundles/${editingId}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json", "x-role": user.role },
+        body: JSON.stringify(payload),
+      });
     } else {
-      await addBundle(payload);
+      await fetch(`${API}/bundles`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "x-role": user.role },
+        body: JSON.stringify(payload),
+      });
     }
+
     setDrawerOpen(false);
     loadBundles();
   };
 
   const handleDelete = async (bundle) => {
     if (!confirm(`Delete ${bundle.title}?`)) return;
-    await deleteBundle(bundle.id);
+    await fetch(`${API}/bundles/${bundle.id}`, {
+      method: "DELETE",
+      headers: { "x-role": user.role },
+    });
     loadBundles();
   };
 
@@ -106,7 +169,6 @@ export default function AdminBundles() {
         </Button>
       }
     >
-      {/* Search */}
       <div className="mb-5">
         <input
           value={search}
@@ -154,7 +216,6 @@ export default function AdminBundles() {
         />
       )}
 
-      {/* Add / Edit drawer */}
       <Drawer
         open={drawerOpen}
         onClose={() => setDrawerOpen(false)}
@@ -173,44 +234,135 @@ export default function AdminBundles() {
             value={form.destination}
             onChange={(e) => setField("destination", e.target.value)}
           />
-
-          {/* NEW */}
           <Input
-            label="FLIGHT"
-            placeholder="Emirates · Direct"
-            value={form.flight}
-            onChange={(e) => setField("flight", e.target.value)}
-          />
-          <Input
-            label="HOTEL"
-            placeholder="Burj Al Arab Jumeirah"
-            value={form.hotel}
-            onChange={(e) => setField("hotel", e.target.value)}
+            label="TRAVELERS"
+            placeholder="2 adults"
+            value={form.travelers}
+            onChange={(e) => setField("travelers", e.target.value)}
           />
 
-          <Input
-            label="NIGHTS"
-            type="number"
-            placeholder="5"
-            value={form.nights}
-            onChange={(e) => setField("nights", e.target.value)}
-          />
-          <div className="grid grid-cols-2 gap-4">
+          {/* Flight details */}
+          <div className="border-t border-hairline pt-3">
+            <p className="text-[11px] font-bold text-ash mb-3 tracking-wide">
+              FLIGHT DETAILS
+            </p>
+            <div className="flex flex-col gap-4">
+              <Input
+                label="AIRLINE"
+                placeholder="Emirates"
+                value={form.airline}
+                onChange={(e) => setField("airline", e.target.value)}
+              />
+              <Input
+                label="FLIGHT NUMBER"
+                placeholder="EK002"
+                value={form.flight_no}
+                onChange={(e) => setField("flight_no", e.target.value)}
+              />
+              <div className="grid grid-cols-2 gap-4">
+                <Input
+                  label="ORIGIN"
+                  placeholder="LHR"
+                  value={form.origin}
+                  onChange={(e) => setField("origin", e.target.value)}
+                />
+                <Input
+                  label="DESTINATION CODE"
+                  placeholder="DXB"
+                  value={form.dest_code}
+                  onChange={(e) => setField("dest_code", e.target.value)}
+                />
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <Input
+                  label="DEPART"
+                  placeholder="08:15"
+                  value={form.depart}
+                  onChange={(e) => setField("depart", e.target.value)}
+                />
+                <Input
+                  label="ARRIVE"
+                  placeholder="18:35"
+                  value={form.arrive}
+                  onChange={(e) => setField("arrive", e.target.value)}
+                />
+              </div>
+              <Input
+                label="DURATION"
+                placeholder="7h 20m"
+                value={form.duration}
+                onChange={(e) => setField("duration", e.target.value)}
+              />
+            </div>
+          </div>
+
+          {/* Hotel (dropdown) */}
+          <div className="border-t border-hairline pt-3">
+            <p className="text-[11px] font-bold text-ash mb-3 tracking-wide">
+              HOTEL
+            </p>
+            <label className="block text-[12px] font-bold mb-1.5 tracking-wide">
+              HOTEL (rooms come from this hotel)
+            </label>
+            <select
+              value={form.hotel_id}
+              onChange={(e) => pickHotel(e.target.value)}
+              className="w-full px-4 py-[13px] border border-hairline rounded-[10px] text-[15px] font-medium outline-none focus:border-ink mb-4"
+            >
+              <option value="">Select a hotel...</option>
+              {hotelOptions.map((h) => (
+                <option key={h.id} value={h.id}>
+                  {h.name} ({h.location})
+                </option>
+              ))}
+            </select>
             <Input
-              label="PRICE"
-              type="number"
-              placeholder="1290"
-              value={form.price}
-              onChange={(e) => setField("price", e.target.value)}
-            />
-            <Input
-              label="ORIGINAL PRICE"
-              type="number"
-              placeholder="1680"
-              value={form.original}
-              onChange={(e) => setField("original", e.target.value)}
+              label="ROOM TYPE (shown on detail)"
+              placeholder="Deluxe Sea View"
+              value={form.room_type}
+              onChange={(e) => setField("room_type", e.target.value)}
             />
           </div>
+
+          {/* Pricing */}
+          <div className="border-t border-hairline pt-3">
+            <p className="text-[11px] font-bold text-ash mb-3 tracking-wide">
+              PRICING
+            </p>
+            <div className="flex flex-col gap-4">
+              <Input
+                label="NIGHTS"
+                type="number"
+                placeholder="5"
+                value={form.nights}
+                onChange={(e) => setField("nights", e.target.value)}
+              />
+              <div className="grid grid-cols-2 gap-4">
+                <Input
+                  label="PRICE"
+                  type="number"
+                  placeholder="1290"
+                  value={form.price}
+                  onChange={(e) => setField("price", e.target.value)}
+                />
+                <Input
+                  label="ORIGINAL PRICE"
+                  type="number"
+                  placeholder="1680"
+                  value={form.original}
+                  onChange={(e) => setField("original", e.target.value)}
+                />
+              </div>
+              <Input
+                label="IMAGE SEED"
+                type="number"
+                placeholder="159"
+                value={form.img_seed}
+                onChange={(e) => setField("img_seed", e.target.value)}
+              />
+            </div>
+          </div>
+
           <div>
             <label className="block text-[12px] font-bold mb-1.5 tracking-wide">
               STATUS

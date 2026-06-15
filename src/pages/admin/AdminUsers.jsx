@@ -4,17 +4,12 @@ import DataTable from "../../components/admin/DataTable";
 import Drawer from "../../components/admin/Drawer";
 import Button from "../../components/common/Button";
 import Input from "../../components/common/Input";
-import {
-  getUsers,
-  addUser,
-  updateUser,
-  deleteUser,
-} from "../../services/userService";
+import { API } from "../../config";
 
 const EMPTY_FORM = {
   name: "",
   email: "",
-  bookings: 0,
+  password: "",
   joined: "",
   status: "Active",
 };
@@ -28,13 +23,16 @@ export default function AdminUsers() {
   const [editingId, setEditingId] = useState(null);
   const [form, setForm] = useState(EMPTY_FORM);
 
+  const currentUser = JSON.parse(localStorage.getItem("user")) || {};
+
   useEffect(() => {
     loadUsers();
   }, []);
 
   const loadUsers = async () => {
     setLoading(true);
-    const data = await getUsers();
+    const res = await fetch(`${API}/users`);
+    const data = await res.json();
     setUsers(data);
     setLoading(false);
   };
@@ -50,7 +48,7 @@ export default function AdminUsers() {
     setForm({
       name: user.name,
       email: user.email,
-      bookings: user.bookings,
+      password: "",
       joined: user.joined,
       status: user.status,
     });
@@ -58,19 +56,38 @@ export default function AdminUsers() {
   };
 
   const handleSave = async () => {
-    const payload = { ...form, bookings: Number(form.bookings) };
+    const payload = { ...form };
+
     if (editingId) {
-      await updateUser(editingId, payload);
+      await fetch(`${API}/users/${editingId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          "x-role": currentUser.role,
+        },
+        body: JSON.stringify(payload),
+      });
     } else {
-      await addUser(payload);
+      await fetch(`${API}/users`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-role": currentUser.role,
+        },
+        body: JSON.stringify(payload),
+      });
     }
+
     setDrawerOpen(false);
     loadUsers();
   };
 
   const handleDelete = async (user) => {
     if (!confirm(`Delete ${user.name}?`)) return;
-    await deleteUser(user.id);
+    await fetch(`${API}/users/${user.id}`, {
+      method: "DELETE",
+      headers: { "x-role": currentUser.role },
+    });
     loadUsers();
   };
 
@@ -107,7 +124,7 @@ export default function AdminUsers() {
         <p className="text-ash py-10 text-center">Loading users...</p>
       ) : (
         <DataTable
-          columns={["Name", "Email", "Bookings", "Joined", "Status"]}
+          columns={["Name", "Email", "Joined", "Status"]}
           rows={visible}
           onEdit={openEdit}
           onDelete={handleDelete}
@@ -115,7 +132,6 @@ export default function AdminUsers() {
             <>
               <td className="px-5 py-3 font-bold">{u.name}</td>
               <td className="px-5 py-3 text-ash">{u.email}</td>
-              <td className="px-5 py-3">{u.bookings}</td>
               <td className="px-5 py-3 text-ash">{u.joined}</td>
               <td className="px-5 py-3">
                 <span
@@ -153,8 +169,15 @@ export default function AdminUsers() {
             onChange={(e) => setField("email", e.target.value)}
           />
           <Input
+            label={editingId ? "PASSWORD (leave blank to keep)" : "PASSWORD"}
+            type="password"
+            placeholder="••••••••"
+            value={form.password}
+            onChange={(e) => setField("password", e.target.value)}
+          />
+          <Input
             label="JOINED"
-            placeholder="Jan 2024"
+            placeholder="Jan 2026"
             value={form.joined}
             onChange={(e) => setField("joined", e.target.value)}
           />

@@ -1,10 +1,6 @@
 import { useState, useEffect } from "react";
 import AdminLayout from "../../components/admin/AdminLayout";
-import {
-  getBookings,
-  updateBookingStatus,
-  deleteBooking,
-} from "../../services/bookingService";
+import { API } from "../../config";
 
 export default function AdminBookings() {
   const [bookings, setBookings] = useState([]);
@@ -12,25 +8,35 @@ export default function AdminBookings() {
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
 
+  const user = JSON.parse(localStorage.getItem("user")) || {};
+
   useEffect(() => {
     loadBookings();
   }, []);
 
   const loadBookings = async () => {
     setLoading(true);
-    const data = await getBookings();
+    const res = await fetch(`${API}/bookings`);
+    const data = await res.json();
     setBookings(data);
     setLoading(false);
   };
 
   const handleStatusChange = async (booking, newStatus) => {
-    await updateBookingStatus(booking.id, newStatus);
+    await fetch(`${API}/bookings/${booking.id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json", "x-role": user.role },
+      body: JSON.stringify({ status: newStatus }),
+    });
     loadBookings();
   };
 
   const handleDelete = async (booking) => {
     if (!confirm(`Delete booking ${booking.ref}?`)) return;
-    await deleteBooking(booking.id);
+    await fetch(`${API}/bookings/${booking.id}`, {
+      method: "DELETE",
+      headers: { "x-role": user.role },
+    });
     loadBookings();
   };
 
@@ -111,10 +117,10 @@ export default function AdminBookings() {
                     <td className="px-5 py-3 font-bold font-mono">{b.ref}</td>
                     <td className="px-5 py-3">{b.customer}</td>
                     <td className="px-5 py-3 text-ash">{b.trip}</td>
-                    <td className="px-5 py-3">{b.type}</td>
-                    <td className="px-5 py-3 text-ash">{b.date}</td>
+                    <td className="px-5 py-3 capitalize">{b.type}</td>
+                    <td className="px-5 py-3 text-ash">{b.booking_date}</td>
                     <td className="px-5 py-3 font-semibold">
-                      ${b.price.toLocaleString()}
+                      ${b.price?.toLocaleString()}
                     </td>
                     <td className="px-5 py-3">
                       <span

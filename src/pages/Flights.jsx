@@ -44,12 +44,13 @@ export default function Flights() {
   const checkedAirlines = Object.keys(checks).filter((label) => checks[label]);
 
   const visibleFlights = flights.filter((f) => {
+    const okStatus = f.status === "Active";
     const okPrice = f.price <= maxPrice;
     const okAirline =
       checkedAirlines.length === 0 || checkedAirlines.includes(f.airline);
     const okWhere =
       where === "" || f.country.toLowerCase().includes(where.toLowerCase());
-    return okPrice && okAirline && okWhere;
+    return okStatus && okPrice && okAirline && okWhere;
   });
 
   return (
