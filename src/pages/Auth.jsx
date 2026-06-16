@@ -55,15 +55,41 @@ export default function Auth() {
     }
   };
 
-  const handleSignup = (e) => {
+  const handleSignup = async (e) => {
     e.preventDefault();
+    setError("");
+
     if (signupData.password !== signupData.confirmPassword) {
-      alert("Passwords do not match");
+      setError("Passwords do not match");
       return;
     }
-    // TODO: call /api/auth/signup (backend later)
-    console.log("Sign up:", signupData);
-    alert("Account created!");
+
+    setLoading(true);
+
+    try {
+      const res = await fetch(`${API}/auth/signup`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: `${signupData.firstName} ${signupData.lastName}`,
+          email: signupData.email,
+          password: signupData.password,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.message || "Could not create account");
+      }
+
+      localStorage.setItem("user", JSON.stringify(data.user));
+      navigate("/");
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (

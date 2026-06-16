@@ -1,4 +1,5 @@
-import { Plane, BedDouble, Gift, Icon } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Plane, BedDouble, Gift } from "lucide-react";
 import SkyoraWordmark from "../auth/SkyoraWordmark";
 import { Link } from "react-router-dom";
 
@@ -8,6 +9,21 @@ export default function TopNav({ activeTab = "" }) {
     { label: "Hotels", Icon: BedDouble, to: "/hotels" },
     { label: "Bundles", Icon: Gift, to: "/bundles" },
   ];
+
+  // Read the logged-in user from localStorage
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const saved = localStorage.getItem("user");
+    if (saved) setUser(JSON.parse(saved));
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("user");
+  };
+
+  // First letter of the user's name
+  const initial = user?.name ? user.name.charAt(0).toUpperCase() : "U";
 
   return (
     <nav className="h-20 bg-canvas border-b border-hairline flex items-center px-8 gap-6 sticky top-0 z-50">
@@ -32,18 +48,33 @@ export default function TopNav({ activeTab = "" }) {
 
       {/* Right side */}
       <div className="flex items-center gap-3">
-        <Link
-          to="/auth"
-          className="text-sm font-medium text-ash hover:text-ink"
-        >
-          Sign In
-        </Link>
-        <Link
-          to="/trips"
-          className="w-9 h-9 rounded-full bg-skyora-gradient flex items-center justify-center text-white text-[13px] font-bold border border-hairline cursor-pointer"
-        >
-          S
-        </Link>
+        {user ? (
+          <>
+            {/* Avatar → trips */}
+            <Link
+              to="/trips"
+              title={user.name}
+              className="w-9 h-9 rounded-full bg-skyora-gradient flex items-center justify-center text-white text-[13px] font-bold border border-hairline cursor-pointer"
+            >
+              {initial}
+            </Link>
+            {/* Logout */}
+            <a
+              href="/auth"
+              onClick={() => localStorage.removeItem("user")}
+              className="text-sm font-medium text-ash hover:text-ink cursor-pointer"
+            >
+              Log out
+            </a>
+          </>
+        ) : (
+          <Link
+            to="/auth"
+            className="text-sm font-medium text-ash hover:text-ink"
+          >
+            Sign In
+          </Link>
+        )}
       </div>
     </nav>
   );

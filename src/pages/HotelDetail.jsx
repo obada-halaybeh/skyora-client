@@ -8,6 +8,7 @@ import { API } from "../config";
 import ReviewsSection from "../components/common/ReviewsSection";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import WeatherWidget from "../components/hotels/WeatherWidget";
 
 export default function HotelDetail() {
   const { id } = useParams();
@@ -42,6 +43,7 @@ export default function HotelDetail() {
   if (!hotel || !hotel.id) {
     return <p className="p-10 text-center">Hotel not found.</p>;
   }
+  const city = hotel.location?.split(",").pop().trim() || hotel.country;
 
   return (
     <div className="bg-canvas min-h-screen">
@@ -82,7 +84,10 @@ export default function HotelDetail() {
                 <span className="text-amber">{"★".repeat(hotel.stars)}</span>
               </div>
             </div>
-
+            {/* Weather */}
+            <div className="mb-8">
+              <WeatherWidget city={city} />
+            </div>
             {/* Rating highlight */}
             <div className="border-y border-hairline py-7 mb-8 text-center">
               <p className="text-5xl font-extrabold leading-none">
