@@ -96,7 +96,7 @@ export default function Auth() {
         alt=""
         className="absolute inset-0 w-full h-full object-cover opacity-[0.35]"
       />
-      <div className="relative bg-canvas rounded-[24px] p-12 w-full max-w-[460px] shadow-auth-modal">
+      <div className="relative bg-canvas rounded-[24px] p-6 sm:p-12 w-full max-w-[460px] shadow-auth-modal">
         <div className="text-center mb-8">
           <SkyoraWordmark size={28} />
           <h1 className="text-2xl font-extrabold mt-[18px] mb-1.5">
@@ -194,7 +194,7 @@ export default function Auth() {
 
         {mode === "signup" && (
           <form onSubmit={handleSignup}>
-            <div className="grid grid-cols-2 gap-4 mb-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
               <Input
                 label="FIRST NAME"
                 placeholder="James"

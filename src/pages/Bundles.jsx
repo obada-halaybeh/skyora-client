@@ -62,7 +62,7 @@ export default function Bundles() {
       <TopNav activeTab="Bundles" />
 
       {/* Main layout */}
-      <div className="flex gap-8 px-8 py-8 max-w-[1300px] mx-auto">
+      <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 px-4 sm:px-8 py-8 max-w-[1300px] mx-auto">
         <FilterSidebar
           maxPrice={maxPrice}
           setMaxPrice={setMaxPrice}
@@ -90,7 +90,7 @@ export default function Bundles() {
           ) : error ? (
             <p className="text-error py-10 text-center">{error}</p>
           ) : (
-            <div className="grid grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               {visibleBundles.map((b) => (
                 <BundleCard key={b.id} {...b} />
               ))}

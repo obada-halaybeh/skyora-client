@@ -58,7 +58,7 @@ export default function Flights() {
     <div className="bg-canvas min-h-screen">
       <TopNav activeTab="Flights" />
 
-      <div className="flex gap-8 px-8 py-8 max-w-[1200px] mx-auto">
+      <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 px-4 sm:px-8 py-8 max-w-[1200px] mx-auto">
         <FilterSidebar
           maxPrice={maxPrice}
           setMaxPrice={setMaxPrice}

@@ -2,13 +2,13 @@ import Button from "../common/Button";
 
 export default function TripCard({ trip, tab, onReview, onCancel, reviewed }) {
   return (
-    <div className="bg-canvas border border-hairline rounded-2xl overflow-hidden mb-4 flex">
+    <div className="bg-canvas border border-hairline rounded-2xl overflow-hidden mb-4 flex flex-col sm:flex-row">
       {/* Image use item_id as the seed so each trip has a stable image */}
-      <div className="relative w-[240px] shrink-0">
+      <div className="relative w-full sm:w-[240px] h-[160px] sm:h-auto shrink-0">
         <img
           src={`https://picsum.photos/seed/${trip.type}${trip.item_id}/240/300`}
           alt={trip.trip}
-          className="w-[240px] h-full object-cover"
+          className="w-full sm:w-[240px] h-full object-cover"
         />
         {tab === "cancelled" && (
           <div className="absolute top-3 left-3 bg-success text-white px-2.5 py-1 rounded-full text-[11px] font-bold">
@@ -18,7 +18,7 @@ export default function TripCard({ trip, tab, onReview, onCancel, reviewed }) {
       </div>
 
       {/* Body */}
-      <div className="flex-1 p-6 flex flex-col">
+      <div className="flex-1 p-4 sm:p-6 flex flex-col">
         {/* Top row: type / price */}
         <div className="flex justify-between items-start mb-2">
           <div className="flex gap-2">

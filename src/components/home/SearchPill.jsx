@@ -10,9 +10,9 @@ export default function SearchPill({
   setDates,
 }) {
   return (
-    <div className="inline-flex items-center bg-canvas rounded-[40px] border border-hairline shadow-[rgba(0,0,0,0.04)_0_2px_6px] overflow-hidden h-16">
+    <div className="flex flex-wrap sm:inline-flex items-center bg-canvas rounded-[28px] sm:rounded-[40px] border border-hairline shadow-[rgba(0,0,0,0.04)_0_2px_6px] overflow-hidden w-full max-w-[560px] sm:w-auto sm:h-16">
       {/* Type selector */}
-      <div className="px-5">
+      <div className="px-4 sm:px-5 py-2 sm:py-0">
         <p className="text-[11px] font-bold text-ink">Type</p>
         <select
           value={type}
@@ -25,24 +25,24 @@ export default function SearchPill({
         </select>
       </div>
 
-      <div className="w-px self-stretch bg-hairline my-2.5" />
+      <div className="w-px self-stretch bg-hairline my-2.5 hidden sm:block" />
 
       {/* Where */}
-      <div className="px-5">
+      <div className="px-4 sm:px-5 py-2 sm:py-0 flex-1 min-w-[120px]">
         <p className="text-[11px] font-bold text-ink">Where</p>
         <input
           type="text"
           value={where}
           onChange={(e) => setWhere(e.target.value)}
           placeholder="Search destination"
-          className="text-sm font-medium text-ash bg-transparent outline-none w-[140px] placeholder:text-ash"
+          className="text-sm font-medium text-ash bg-transparent outline-none w-full sm:w-[140px] placeholder:text-ash"
         />
       </div>
 
-      <div className="w-px self-stretch bg-hairline my-2.5" />
+      <div className="w-px self-stretch bg-hairline my-2.5 hidden sm:block" />
 
       {/* Dates */}
-      <div className="px-5">
+      <div className="px-4 sm:px-5 py-2 sm:py-0">
         <p className="text-[11px] font-bold text-ink">Date</p>
         <input
           type="date"
@@ -55,7 +55,7 @@ export default function SearchPill({
       {/* Search button → goes to the chosen results page with the query */}
       <Link
         to={`/${type}?where=${encodeURIComponent(where)}`}
-        className="w-12 h-12 rounded-full bg-skyora-gradient flex items-center justify-center mx-2 shadow-[0_2px_8px_rgba(255,56,92,0.4)] shrink-0"
+        className="w-12 h-12 rounded-full bg-skyora-gradient flex items-center justify-center mx-2 my-2 sm:my-0 shadow-[0_2px_8px_rgba(255,56,92,0.4)] shrink-0"
       >
         <Search size={18} className="text-white" />
       </Link>

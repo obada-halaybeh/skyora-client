@@ -6,8 +6,8 @@ export default function DataTable({
   onDelete,
 }) {
   return (
-    <div className="bg-canvas border border-hairline rounded-2xl overflow-hidden">
-      <table className="w-full text-sm">
+    <div className="bg-canvas border border-hairline rounded-2xl overflow-x-auto">
+      <table className="w-full text-sm min-w-[640px]">
         <thead>
           <tr className="border-b border-hairline bg-cloud">
             {columns.map((col) => (

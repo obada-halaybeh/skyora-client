@@ -28,7 +28,7 @@ export default function FilterSidebar({
   };
 
   return (
-    <div className="w-[280px] py-6 shrink-0">
+    <div className="w-full lg:w-[280px] py-6 lg:shrink-0">
       <h3 className="text-lg font-bold mb-6">Filters</h3>
 
       {/* Max Price */}
