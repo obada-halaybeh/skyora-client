@@ -258,7 +258,7 @@ export default function AdminBundles() {
                 value={form.flight_no}
                 onChange={(e) => setField("flight_no", e.target.value)}
               />
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <Input
                   label="ORIGIN"
                   placeholder="LHR"
@@ -272,7 +272,7 @@ export default function AdminBundles() {
                   onChange={(e) => setField("dest_code", e.target.value)}
                 />
               </div>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <Input
                   label="DEPART"
                   placeholder="08:15"
@@ -336,7 +336,7 @@ export default function AdminBundles() {
                 value={form.nights}
                 onChange={(e) => setField("nights", e.target.value)}
               />
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <Input
                   label="PRICE"
                   type="number"

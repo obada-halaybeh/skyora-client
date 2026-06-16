@@ -50,13 +50,13 @@ export default function HotelDetail() {
       <TopNav activeTab="Hotels" />
 
       {/* Image gallery */}
-      <div className="grid grid-cols-2 gap-1 h-[420px] overflow-hidden">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-1 h-[220px] sm:h-[420px] overflow-hidden">
         <img
           src={`https://picsum.photos/seed/${hotel.gallerySeeds[0]}/720/480`}
           alt={hotel.name}
           className="w-full h-full object-cover"
         />
-        <div className="grid grid-cols-2 gap-1">
+        <div className="hidden sm:grid grid-cols-2 gap-1">
           {hotel.gallerySeeds.slice(1, 5).map((seed) => (
             <img
               key={seed}
@@ -68,8 +68,8 @@ export default function HotelDetail() {
         </div>
       </div>
 
-      <div className="max-w-[1200px] mx-auto px-8 py-10">
-        <div className="flex gap-12">
+      <div className="max-w-[1200px] mx-auto px-4 sm:px-8 py-10">
+        <div className="flex flex-col lg:flex-row gap-8 lg:gap-12">
           {/* LEFT */}
           <div className="flex-1">
             {/* Header */}
@@ -104,7 +104,7 @@ export default function HotelDetail() {
             {/* Amenities */}
             <div className="border-b border-hairline pb-8 mb-8">
               <h2 className="text-xl font-bold mb-5">What this place offers</h2>
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {hotel.offers.map((offer) => (
                   <div
                     key={offer}
@@ -126,16 +126,16 @@ export default function HotelDetail() {
                   return (
                     <div
                       key={room.type}
-                      className={`flex gap-5 border rounded-2xl overflow-hidden transition-all ${
+                      className={`flex flex-col sm:flex-row gap-4 sm:gap-5 border rounded-2xl overflow-hidden transition-all ${
                         picked ? "border-rausch" : "border-hairline"
                       }`}
                     >
                       <img
                         src={`https://picsum.photos/seed/${room.img_seed}/300/180`}
                         alt={room.type}
-                        className="w-[220px] h-[150px] object-cover shrink-0"
+                        className="w-full sm:w-[220px] h-[150px] object-cover shrink-0"
                       />
-                      <div className="py-5 pr-5 flex-1 flex flex-col justify-between">
+                      <div className="px-5 pb-5 sm:py-5 sm:pr-5 sm:px-0 flex-1 flex flex-col justify-between gap-3">
                         <div>
                           <h3 className="text-lg font-bold mb-1">
                             {room.type}
@@ -170,8 +170,8 @@ export default function HotelDetail() {
           </div>
 
           {/* RIGHT: sticky booking panel */}
-          <div className="shrink-0">
-            <div className="sticky top-[100px]">
+          <div className="lg:shrink-0">
+            <div className="lg:sticky lg:top-[100px]">
               <Link to={`/checkout/hotel/${hotel.id}`}>
                 <BookingPanel
                   price={hotel.price}

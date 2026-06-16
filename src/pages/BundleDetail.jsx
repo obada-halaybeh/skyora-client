@@ -43,13 +43,13 @@ export default function BundleDetail() {
     <div className="bg-canvas min-h-screen">
       <TopNav activeTab="Bundles" />
 
-      <div className="max-w-[1200px] mx-auto px-8 py-10">
+      <div className="max-w-[1200px] mx-auto px-4 sm:px-8 py-10">
         {/* Header */}
         <div className="mb-8">
           <p className="text-[13px] text-ash font-medium mb-2">
             {bundle.destination} · {bundle.nights} nights · {bundle.travelers}
           </p>
-          <h1 className="text-4xl font-extrabold mb-3">{bundle.title}</h1>
+          <h1 className="text-2xl sm:text-4xl font-extrabold mb-3">{bundle.title}</h1>
           <div className="flex gap-3">
             <span className="bg-rausch/10 text-rausch text-[13px] font-bold px-3 py-1.5 rounded-lg">
               Save {savings}%
@@ -60,11 +60,11 @@ export default function BundleDetail() {
           </div>
         </div>
 
-        <div className="flex gap-12">
+        <div className="flex flex-col lg:flex-row gap-8 lg:gap-12">
           {/* LEFT */}
           <div className="flex-1">
             {/* Flight + Hotel summary cards */}
-            <div className="grid grid-cols-2 gap-5 mb-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-8">
               {/* Flight card */}
               <div className="border border-hairline rounded-2xl p-6">
                 <p className="text-[11px] font-bold text-ash mb-4 tracking-wide">
@@ -173,8 +173,8 @@ export default function BundleDetail() {
           </div>
 
           {/* RIGHT: sticky booking panel */}
-          <div className="shrink-0">
-            <div className="sticky top-[100px]">
+          <div className="lg:shrink-0">
+            <div className="lg:sticky lg:top-[100px]">
               <Link to={`/checkout/bundle/${bundle.id}`}>
                 <BookingPanel
                   price={bundle.price}

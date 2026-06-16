@@ -9,7 +9,7 @@ export default function BookingPanel({
   const total = price + taxes;
 
   return (
-    <div className="w-[320px] bg-canvas border border-hairline rounded-2xl p-6 shadow-card-rest">
+    <div className="w-full lg:w-[320px] bg-canvas border border-hairline rounded-2xl p-6 shadow-card-rest">
       {/* Price header */}
       <div className="mb-5">
         <p className="text-3xl font-extrabold">

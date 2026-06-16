@@ -196,7 +196,7 @@ export default function Checkout() {
       <TopNav />
 
       {/* Step indicator */}
-      <div className="border-b border-hairline py-5 px-16">
+      <div className="border-b border-hairline py-5 px-4 sm:px-16">
         <div className="flex items-center max-w-[600px] mx-auto">
           {steps.map((s, i) => {
             const num = i + 1;
@@ -233,7 +233,7 @@ export default function Checkout() {
       </div>
 
       {/* Main */}
-      <div className="flex gap-12 px-16 py-10 max-w-[1200px] mx-auto">
+      <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 px-4 sm:px-16 py-10 max-w-[1200px] mx-auto">
         <div className="flex-1">
           {/* ── STEP 1: Traveler Info ── */}
           {step === 1 && (
@@ -244,7 +244,7 @@ export default function Checkout() {
               <div className="border-b border-hairline pb-3 mb-5">
                 <p className="text-base font-bold">Passenger 1 · Adult</p>
               </div>
-              <div className="grid grid-cols-2 gap-4 mb-8">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
                 <Input
                   label="FIRST NAME"
                   placeholder="James"
@@ -403,8 +403,8 @@ export default function Checkout() {
         </div>
 
         {/* Order summary */}
-        <div className="shrink-0">
-          <div className="w-[340px] bg-canvas border border-hairline rounded-2xl p-6 shadow-card-rest sticky top-[100px]">
+        <div className="lg:shrink-0">
+          <div className="w-full lg:w-[340px] bg-canvas border border-hairline rounded-2xl p-6 shadow-card-rest lg:sticky lg:top-[100px]">
             <h3 className="text-base font-bold mb-4">Order Summary</h3>
 
             <div className="flex gap-3 mb-4 bg-cloud rounded-xl p-3">

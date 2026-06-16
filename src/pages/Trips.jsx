@@ -110,7 +110,7 @@ export default function Trips() {
     <div className="bg-canvas min-h-screen">
       <TopNav />
 
-      <div className="max-w-[1200px] mx-auto px-8 py-10">
+      <div className="max-w-[1200px] mx-auto px-4 sm:px-8 py-10">
         {/* Heading */}
         <div className="mb-7">
           <p className="text-[11px] font-bold text-ash tracking-wide mb-1.5">
@@ -124,14 +124,14 @@ export default function Trips() {
         </div>
 
         {/* Tabs */}
-        <div className="border-b border-hairline mb-7 flex gap-1">
+        <div className="border-b border-hairline mb-7 flex gap-1 overflow-x-auto">
           {tabs.map((t) => {
             const active = tab === t.id;
             return (
               <div
                 key={t.id}
                 onClick={() => setTab(t.id)}
-                className={`relative px-5 py-3.5 cursor-pointer flex items-center gap-2 text-[15px] font-bold ${
+                className={`relative px-3 sm:px-5 py-3.5 cursor-pointer flex items-center gap-2 text-[15px] font-bold shrink-0 whitespace-nowrap ${
                   active ? "text-ink" : "text-ash"
                 }`}
               >

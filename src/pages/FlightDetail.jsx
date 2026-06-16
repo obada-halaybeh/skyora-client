@@ -55,8 +55,8 @@ export default function FlightDetail() {
     <div className="bg-canvas min-h-screen">
       <TopNav activeTab="Flights" />
 
-      <div className="max-w-[1200px] mx-auto px-8 py-10">
-        <div className="flex gap-12">
+      <div className="max-w-[1200px] mx-auto px-4 sm:px-8 py-10">
+        <div className="flex flex-col lg:flex-row gap-8 lg:gap-12">
           {/* LEFT: main content */}
           <div className="flex-1">
             {/* Route header */}
@@ -64,10 +64,10 @@ export default function FlightDetail() {
               <p className="text-[13px] text-ash font-medium mb-2">
                 {flight.airline} · Economy · {flight.flight_no}
               </p>
-              <div className="flex items-center gap-6 mb-4">
+              <div className="flex items-center gap-3 sm:gap-6 mb-4">
                 {/* Departure */}
                 <div>
-                  <p className="text-5xl font-extrabold">{flight.depart}</p>
+                  <p className="text-3xl sm:text-5xl font-extrabold">{flight.depart}</p>
                   <p className="text-base font-bold mt-1">{flight.from_city}</p>
                   <p className="text-sm text-ash">{flight.from_terminal}</p>
                 </div>
@@ -92,7 +92,7 @@ export default function FlightDetail() {
 
                 {/* Arrival */}
                 <div className="text-right">
-                  <p className="text-5xl font-extrabold">{flight.arrive}</p>
+                  <p className="text-3xl sm:text-5xl font-extrabold">{flight.arrive}</p>
                   <p className="text-base font-bold mt-1">{flight.to_city}</p>
                   <p className="text-sm text-ash">{flight.to_terminal}</p>
                 </div>
@@ -114,7 +114,7 @@ export default function FlightDetail() {
             {/* Baggage */}
             <div className="border-t border-hairline pt-8 mb-8">
               <h2 className="text-xl font-bold mb-4">Baggage Policy</h2>
-              <div className="grid grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 {baggage.map((b) => (
                   <div key={b.title} className="bg-cloud rounded-xl p-4">
                     <div className="text-2xl mb-2">{b.icon}</div>
@@ -141,8 +141,8 @@ export default function FlightDetail() {
           </div>
 
           {/* RIGHT: sticky booking panel */}
-          <div className="shrink-0">
-            <div className="sticky top-[100px]">
+          <div className="lg:shrink-0">
+            <div className="lg:sticky lg:top-[100px]">
               <Link to={`/checkout/flight/${flight.id}`}>
                 <BookingPanel
                   price={flight.price}

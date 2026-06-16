@@ -64,21 +64,21 @@ export default function Home() {
     <div className="bg-canvas min-h-screen">
       <TopNav />
 
-      <div className="relative h-[560px]">
+      <div className="relative h-[420px] sm:h-[560px]">
         <img
           src="https://picsum.photos/seed/542/1440/560"
           alt="hero"
           className="w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-black/10 to-black/40" />
-        <div className="absolute inset-0 flex flex-col items-center justify-center gap-8 px-4">
+        <div className="absolute inset-0 flex flex-col items-center justify-center gap-6 sm:gap-8 px-4">
           <div className="text-center">
-            <h1 className="text-[52px] leading-[1.1] font-extrabold text-white mb-3 [text-shadow:0_2px_12px_rgba(0,0,0,0.25)]">
+            <h1 className="text-[32px] sm:text-[44px] md:text-[52px] leading-[1.1] font-extrabold text-white mb-3 [text-shadow:0_2px_12px_rgba(0,0,0,0.25)]">
               Your next adventure
               <br />
               starts here
             </h1>
-            <p className="text-lg font-medium text-white/90">
+            <p className="text-base sm:text-lg font-medium text-white/90">
               {" "}
               Flights, hotels and packages to over 500 destinations
             </p>
@@ -94,23 +94,23 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="px-16 pt-16">
-        <section className="mb-14">
-          <h2 className="text-[28px] font-bold mb-2">Popular Destinations</h2>
-          <p className="text-base text-ash font-medium mb-7">
+      <div className="px-4 sm:px-8 lg:px-16 pt-10 sm:pt-16">
+        <section className="mb-10 sm:mb-14">
+          <h2 className="text-xl sm:text-[28px] font-bold mb-2">Popular Destinations</h2>
+          <p className="text-base text-ash font-medium mb-5 sm:mb-7">
             Trending routes this season
           </p>
-          <div className="flex gap-5 overflow-x-auto pb-2">
+          <div className="flex gap-4 sm:gap-5 overflow-x-auto pb-2">
             {destinations.map((d) => (
               <div
                 key={d.city}
                 onClick={() => setWhere(d.country)}
-                className="shrink-0 w-[200px] cursor-pointer"
+                className="shrink-0 w-[160px] sm:w-[200px] cursor-pointer"
               >
                 <img
                   src={`https://picsum.photos/seed/${d.seed}/200/150`}
                   alt={d.city}
-                  className="w-[200px] h-[150px] object-cover rounded-2xl"
+                  className="w-[160px] sm:w-[200px] h-[120px] sm:h-[150px] object-cover rounded-2xl"
                 />
                 <div className="pt-3">
                   <p className="text-base font-bold">{d.city}</p>
@@ -124,13 +124,13 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="mb-14">
-          <h2 className="text-[28px] font-bold mb-2">Featured Packages</h2>
-          <p className="text-base text-ash font-medium mb-7">
+        <section className="mb-10 sm:mb-14">
+          <h2 className="text-xl sm:text-[28px] font-bold mb-2">Featured Packages</h2>
+          <p className="text-base text-ash font-medium mb-5 sm:mb-7">
             {" "}
             Flight + hotel, better together
           </p>
-          <div className="grid grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
             {bundles
               .filter((b) => b.status === "Active")
               .slice(0, 3)
@@ -140,11 +140,11 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="bg-cloud rounded-3xl px-12 py-10 mb-16">
-          <h2 className="text-[22px] font-bold text-center mb-8">
+        <section className="bg-cloud rounded-3xl px-5 sm:px-12 py-8 sm:py-10 mb-10 sm:mb-16">
+          <h2 className="text-lg sm:text-[22px] font-bold text-center mb-6 sm:mb-8">
             Why book with Skyora?
           </h2>
-          <div className="grid grid-cols-4 gap-8">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 sm:gap-8">
             {trustItems.map((t) => (
               <div key={t.title} className="text-center">
                 <t.Icon size={32} className="mx-auto mb-3 text-rausch" />

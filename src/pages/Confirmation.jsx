@@ -76,7 +76,7 @@ export default function Confirmation() {
     <div className="bg-canvas min-h-screen">
       <TopNav />
 
-      <div className="max-w-[640px] mx-auto px-8 py-16">
+      <div className="max-w-[640px] mx-auto px-4 sm:px-8 py-12 sm:py-16">
         {/* Success header */}
         <div className="text-center mb-10">
           <div className="w-20 h-20 rounded-full bg-success/10 flex items-center justify-center mx-auto mb-5">

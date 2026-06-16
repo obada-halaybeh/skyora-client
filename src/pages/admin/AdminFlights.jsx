@@ -202,7 +202,7 @@ export default function AdminFlights() {
             value={form.flight_no}
             onChange={(e) => setField("flight_no", e.target.value)}
           />
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Input
               label="ORIGIN"
               placeholder="LHR"
@@ -222,7 +222,7 @@ export default function AdminFlights() {
             value={form.country}
             onChange={(e) => setField("country", e.target.value)}
           />
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Input
               label="DEPART TIME"
               placeholder="08:15"
@@ -236,7 +236,7 @@ export default function AdminFlights() {
               onChange={(e) => setField("arrive", e.target.value)}
             />
           </div>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Input
               label="DURATION"
               placeholder="7h 20m"
@@ -263,7 +263,7 @@ export default function AdminFlights() {
               <option value="yes">Yes (direct)</option>
             </select>
           </div>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Input
               label="SEATS"
               type="number"

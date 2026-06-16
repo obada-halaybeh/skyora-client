@@ -246,7 +246,7 @@ export default function AdminHotels() {
             value={form.country}
             onChange={(e) => setField("country", e.target.value)}
           />
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Input
               label="STARS"
               type="number"
@@ -262,7 +262,7 @@ export default function AdminHotels() {
               onChange={(e) => setField("rating", e.target.value)}
             />
           </div>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Input
               label="REVIEW COUNT"
               type="number"

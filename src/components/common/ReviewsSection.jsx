@@ -25,7 +25,7 @@ export default function ReviewsSection({ title = "Reviews", reviews = [] }) {
         </span>
       </div>
 
-      <div className="grid grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
         {reviews.map((r, i) => (
           <div key={i} className="border border-hairline rounded-2xl p-5">
             {/* Header: avatar + name + date */}
