@@ -40,8 +40,9 @@ export default function Flights() {
     setChecks({ ...checks, [label]: !checks[label] });
   };
 
-  const sortOptions = ["Cheapest", "Fastest", "Best"];
   const checkedAirlines = Object.keys(checks).filter((label) => checks[label]);
+
+  const airlines = [...new Set(flights.map((f) => f.airline))].sort();
 
   const visibleFlights = flights.filter((f) => {
     const okStatus = f.status === "Active";
@@ -64,13 +65,7 @@ export default function Flights() {
           checks={checks}
           toggle={toggle}
           groupTitle="Airlines"
-          options={[
-            "Emirates",
-            "British Airways",
-            "Lufthansa",
-            "Singapore Airlines",
-            "Qatar Airways",
-          ]}
+          options={airlines}
         />
 
         <div className="flex-1">
