@@ -67,7 +67,7 @@ export default function Trips() {
     { id: "cancelled", label: "Cancelled", count: tripData.cancelled.length },
   ];
 
-  // Submit a review to the backend, then mark this trip reviewed
+  // Submit a review
   const handleSubmitReview = async (data) => {
     const review = {
       type: reviewing.type,
@@ -92,7 +92,7 @@ export default function Trips() {
     setReviewing(null);
   };
 
-  // Cancel a trip — updates the database, then refreshes
+  // Cancel a trip
   const handleCancel = async (trip) => {
     try {
       await fetch(`${API}/bookings/${trip.id}`, {
@@ -103,7 +103,7 @@ export default function Trips() {
     } catch (err) {
       console.error("Cancel failed", err);
     }
-    fetchTrips(); // reload from the backend
+    fetchTrips();
   };
 
   return (

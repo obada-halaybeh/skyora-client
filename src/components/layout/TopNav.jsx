@@ -22,7 +22,6 @@ export default function TopNav({ activeTab = "" }) {
     localStorage.removeItem("user");
   };
 
-  // First letter of the user's name
   const initial = user?.name ? user.name.charAt(0).toUpperCase() : "U";
 
   return (
@@ -50,7 +49,7 @@ export default function TopNav({ activeTab = "" }) {
       <div className="flex items-center gap-3">
         {user ? (
           <>
-            {/* Avatar → trips */}
+            {/* Avatar -> trips */}
             <Link
               to="/trips"
               title={user.name}

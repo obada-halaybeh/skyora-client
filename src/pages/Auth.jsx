@@ -32,17 +32,14 @@ export default function Auth() {
       });
 
       if (!res.ok) {
-        // backend returned 401 etc.
         throw new Error("Invalid email or password");
       }
 
       const data = await res.json();
       const user = data.user;
 
-      // Save the user so other pages know who's logged in (and their role)
       localStorage.setItem("user", JSON.stringify(user));
 
-      // Redirect based on role
       if (user.role === "admin") {
         navigate("/admin/flights");
       } else {

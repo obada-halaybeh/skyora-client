@@ -6,7 +6,6 @@ import Button from "../../components/common/Button";
 import Input from "../../components/common/Input";
 import { API } from "../../config";
 
-// Fixed set of room types the admin can pick from (preset size/guests/price)
 const ROOM_PRESETS = [
   { type: "Standard Room", size: "30m²", guests: 2, price: 180 },
   { type: "Deluxe Room", size: "40m²", guests: 2, price: 320 },
@@ -40,7 +39,6 @@ export default function AdminHotels() {
   const [editingId, setEditingId] = useState(null);
   const [form, setForm] = useState(EMPTY_FORM);
 
-  // Which room types are checked (by type name)
   const [pickedRooms, setPickedRooms] = useState({});
 
   const user = JSON.parse(localStorage.getItem("user")) || {};
@@ -67,7 +65,6 @@ export default function AdminHotels() {
   const openEdit = async (hotel) => {
     setEditingId(hotel.id);
 
-    // Fetch the full hotel (with rooms/offers/gallery) to pre-fill
     const res = await fetch(`${API}/hotels/${hotel.id}`);
     const full = await res.json();
 
@@ -86,7 +83,6 @@ export default function AdminHotels() {
       status: full.status,
     });
 
-    // Pre-check the rooms this hotel already has
     const picked = {};
     (full.rooms || []).forEach((r) => {
       picked[r.type] = true;
@@ -101,16 +97,13 @@ export default function AdminHotels() {
   };
 
   const handleSave = async () => {
-    // Build the rooms array from checked presets
     const rooms = ROOM_PRESETS.filter((r) => pickedRooms[r.type]);
 
-    // Offers: comma text → array of strings
     const offers = form.offers
       .split(",")
       .map((o) => o.trim())
       .filter((o) => o.length > 0);
 
-    // Gallery: comma text → array of numbers
     const gallerySeeds = form.gallery
       .split(",")
       .map((s) => Number(s.trim()))
@@ -317,7 +310,7 @@ export default function AdminHotels() {
             onChange={(e) => setField("offers", e.target.value)}
           />
 
-          {/* Rooms — checklist */}
+          {/* Rooms */}
           <div>
             <label className="block text-[12px] font-bold mb-2 tracking-wide">
               ROOMS (pick which types this hotel has)

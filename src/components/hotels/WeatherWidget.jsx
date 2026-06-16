@@ -32,7 +32,7 @@ export default function WeatherWidget({ city }) {
   }
 
   if (error || !weather) {
-    return null; // hide the widget if weather fails (don't clutter the page)
+    return null; // hide the widget if weather fails
   }
 
   return (

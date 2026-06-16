@@ -34,7 +34,6 @@ export default function Confirmation() {
     return <p className="p-10 text-center">Booking not found.</p>;
   }
 
-  // Build a simple summary based on type
   let summary = null;
   if (type === "flight") {
     summary = {

@@ -117,7 +117,6 @@ export default function AdminBundles() {
       price: Number(form.price),
       original: Number(form.original),
       img_seed: Number(form.img_seed),
-      // flight_label auto-built from airline if empty
       flight_label: form.flight_label || `${form.airline} · Direct`,
     };
 
@@ -296,7 +295,7 @@ export default function AdminBundles() {
             </div>
           </div>
 
-          {/* Hotel (dropdown) */}
+          {/* Hotel*/}
           <div className="border-t border-hairline pt-3">
             <p className="text-[11px] font-bold text-ash mb-3 tracking-wide">
               HOTEL

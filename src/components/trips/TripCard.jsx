@@ -3,7 +3,7 @@ import Button from "../common/Button";
 export default function TripCard({ trip, tab, onReview, onCancel, reviewed }) {
   return (
     <div className="bg-canvas border border-hairline rounded-2xl overflow-hidden mb-4 flex">
-      {/* Image — use item_id as the seed so each trip has a stable image */}
+      {/* Image use item_id as the seed so each trip has a stable image */}
       <div className="relative w-[240px] shrink-0">
         <img
           src={`https://picsum.photos/seed/${trip.type}${trip.item_id}/240/300`}

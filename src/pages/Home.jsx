@@ -27,7 +27,7 @@ export default function Home() {
       console.error("Failed to load bundles", err);
     }
   };
-
+  //fixed data idk what to put on here :(
   const destinations = [
     { city: "Dubai", country: "UAE", price: 420, seed: 159 },
     { city: "Paris", country: "France", price: 310, seed: 237 },
